@@ -1,0 +1,37 @@
+version: '3.7'
+
+services: 
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+  
+  #frontend:
+  #  build: 
+  #    context: ./frontend
+  #  ports:
+  #    - "3000:3000"
+  #  depends_on:
+  #    - db
+  #  volumes:
+  #    - ./frontend:/app
+  
+  db:
+    image: mysql:8.3
+    environment:
+      MYSQL_DATABASE: "jvsoft"
+      MYSQL_USER: "jvsoft"
+      MYSQL_PASSWORD: "12345678"
+      MYSQL_ROOT_PASSWORD: "12345678"
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
