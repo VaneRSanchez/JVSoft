@@ -11,15 +11,15 @@ services:
     volumes:
       - ./backend:/app
   
-  #frontend:
-  #  build: 
-  #    context: ./frontend
-  #  ports:
-  #    - "3000:3000"
-  #  depends_on:
-  #    - db
-  #  volumes:
-  #    - ./frontend:/app
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - ./frontend:/app
   
   db:
     image: mysql:8.3
@@ -31,7 +31,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - jvsoft_db:/var/lib/mysql
 
 volumes:
-  db_data:
+  jvsoft_db:
