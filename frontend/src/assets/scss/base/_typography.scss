@@ -1,0 +1,40 @@
+@use 'vars' as v;
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: 500;
+}
+
+html {
+    font-size: v.$html-fontsize;
+}
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 1rem;
+}
