@@ -20,6 +20,7 @@ services:
       - db
     volumes:
       - ./frontend:/app
+    command: sh -c "npm install && npm start"
   
   db:
     image: mysql:8.3

@@ -3,27 +3,76 @@
 .auth {
     display: flex;
     background: v.$bg-primary;
+    background-image: url('../../images/bg2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 
     .info {
-        background: v.$bg-primary;
+        position: relative;
+        background: rgba(v.$color-primary, 0.75);
         width: 50%;
-        height: 100vh;
-
+        height: 100vh;        
+        
+        .edge {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 0;
+            right: 0;
+        }
+            
         .container {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: v.$color-primary;
             width: 100%;
             height: 100%;
-            border-top-right-radius: 60px;
-        }
+
+            .slogan {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                padding: 40px;
+                box-sizing: border-box;
+
+                .title {
+                    max-width: 500px;
+                    font-size: 2.4rem;
+                    font-weight: 700;
+                    color: v.$color-white;
+                }
+                
+                .text {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    text-align: center;
+                    color: v.$color-white;
+                }
+            }
+        }             
     }
 
     .content {
-        background: v.$color-primary;
+        position: relative;
         width: 50%;
         height: 100vh;
+
+        .edge {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            bottom: 0;
+            left: 0;
+            transform: rotate(180deg);
+
+            svg {
+                path {
+                  fill:  rgba(v.$color-primary, 0.75);;
+                }
+            }
+              
+        }
 
         .container {
             display: flex;
@@ -32,14 +81,16 @@
             background: v.$bg-primary;
             width: 100%;
             height: 100%;
-            border-bottom-left-radius: 60px;
+            border-bottom-left-radius: 47px;
 
             .view {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+                padding: 40px;
                 width: 100%;
-                max-width: 500px;
+                max-width: 600px;
+                box-sizing: border-box;
 
                 .remember-forgot {
                     display: flex;

@@ -13,11 +13,24 @@ function AuthController() {
   return (
     <div className="auth">
         <div className="info">
-          <div className="container">
-            hola
+          <div className="edge">
+            <svg viewBox="0 0 100 100">
+              <path d="M 0 0 C 100 20, 100 100, 100 100 L 100 100 L 100 0 Z" fill="white" />
+            </svg>
           </div>
+          <div className="container">
+            <div className="slogan">
+              <h1 className="title">JVSoft</h1>
+              <h2 className="text">¡El mejor software para tu restaurante!</h2>
+            </div>              
+          </div>          
         </div>
         <div className="content">
+          <div className="edge">
+            <svg viewBox="0 0 100 100">
+              <path d="M 0 0 C 100 0, 100 100, 100 100 L 100 100 L 100 0 Z" />
+            </svg>
+          </div>
           <div className="container">
             <div className="view">
               <div className="input-group">                

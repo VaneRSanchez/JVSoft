@@ -43,6 +43,11 @@
                 outline: none;
             }
         }
+
+        input[type="password"]{
+            font-size: calc(v.$input-font-size - 6px);
+            background: none;
+        }
     }
 
     .bar {
@@ -191,14 +196,13 @@
 }
 
 .btn {
-    height: 50px;
+    height: 45px;
     border: v.$bg-bar solid 2px;
     border-radius: 8px;
     background: none;
     color: v.$bg-bar;
     font-size: v.$input-font-size;
     font-weight: 600;
-    padding-top: 1px;
     cursor: pointer;
 
     &:hover {
