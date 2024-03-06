@@ -13,7 +13,7 @@ Food sales and inventory system with expiration alert.
 <table>
   <tr>
     <td>
-      <img src="https://raw.githubusercontent.com/TYisusDv/YiPos/master/images/p1.png" alt="Screenshot 1" width="100%">
+      <img src="https://raw.githubusercontent.com/VaneRSanchez/JVSoft/master/images/ss1.png" alt="Screenshot 1" width="100%">
       <p>Login</p>
     </td>
     <td>      
