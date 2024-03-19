@@ -1,17 +1,36 @@
-$html-fontsize: 11pt;
+$html-fontsize: 10px;
 
 $bg-primary: #fff;
 $bg-bar: #aaaaaa;
+$bg-content: #fafafa;
 
 $color-white: #fff;
 $color-body: #000;
 $color-primary: #26798E;
 $color-primary-hover: #2f8da5;
+$color-primary-disabled: #5a8a96;
+$color-blue: #A8D1D1;
 $color-secondary: #ffb902;
+$color-danger: #FF6961;
+$color-success: #77DD77;
+$color-dark: #171717;
+
+$border-color: #e9edf3;
 
 $input-color-active: #a3a3a3;
-$input-height: 48px;
+$input-height: 34px;
 $input-height-focus: 58px;
-$input-font-size: 1rem;
+$input-font-size: 1.2rem;
+
+$btn-radius: 8px;
 
 $checkbox-size: 20px;
+
+$navbar-height: 56px;
+
+$menu-width: 260px;
+$menu-bg: $color-dark;
+
+$boxshadow: 0 0 12px -6px rgba(0, 0, 0, 0.4); 
+
+$info-bar-height: 58px;

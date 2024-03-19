@@ -1,14 +1,21 @@
 @use 'vars' as v;
+@use '../mixins/base' as m;
+
+$auth-input-font-size: v.$input-font-size + 0.2rem;
 
 .input-group {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 6px;
+    gap: 2px;
     width: 100%;
     height: v.$input-height;
     cursor: text;
     transition: height ease 200ms;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     .input {
         display: flex;
@@ -18,8 +25,8 @@
 
         label {
             position: absolute;
-            transform: translate(1.7rem, 2px);
-            font-size: v.$input-font-size;
+            transform: translate(2.3rem, -0.3rem);
+            font-size: $auth-input-font-size;
             color: v.$bg-bar;
             cursor: text;
             font-weight: 600;
@@ -28,13 +35,13 @@
 
         svg {
             cursor: text;
-            font-size: 1.2rem;
+            font-size: $auth-input-font-size;
             color: v.$bg-bar;
             transition: color ease 200ms;
         }
 
         input {
-            font-size: v.$input-font-size;
+            font-size: $auth-input-font-size;
             background: none;
             border: none;
             width: 100%;
@@ -45,7 +52,7 @@
         }
 
         input[type="password"]{
-            font-size: calc(v.$input-font-size - 6px);
+            font-size: calc($auth-input-font-size);
             background: none;
         }
     }
@@ -56,6 +63,10 @@
         width: 100%;
         border-radius: 10px;
         transition: background ease 200ms;
+    }
+
+    svg {
+        transform: translate(0, -0.3rem);
     }
 
     &:hover {
@@ -81,7 +92,7 @@
         }
 
         label {
-            transform: translate(0, -1.6rem);
+            transform: translate(0, -2.5rem);
             color: v.$color-body;
             font-weight: normal;
         }
@@ -99,6 +110,10 @@
 .form-checkbox {
     position: relative;
     display: block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
 
     .checkbox {
         position: absolute;
@@ -111,7 +126,7 @@
             cursor: pointer;
             line-height: v.$checkbox-size;
             padding-left: v.$checkbox-size + 6;
-            font-size: v.$input-font-size;
+            font-size: $auth-input-font-size;
             font-family: sans-serif;
             font-weight: 500;
             color: v.$color-body;
@@ -196,18 +211,29 @@
 }
 
 .btn {
+    width: 100%;
     height: 45px;
     border: v.$bg-bar solid 2px;
-    border-radius: 8px;
+    border-radius: v.$btn-radius;
     background: none;
     color: v.$bg-bar;
-    font-size: v.$input-font-size;
+    font-size: $auth-input-font-size;
     font-weight: 600;
     cursor: pointer;
+    padding: 13px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
 
     &:hover {
         background: v.$bg-bar;
         color: v.$color-white;
+    }
+    
+    &.btn-sm {
+        height: 36px;
+        padding: 9px;
     }
 
     &.btn {
@@ -220,6 +246,155 @@
                 border: v.$color-primary-hover solid 2px;
                 background-color: v.$color-primary-hover;
             }
+
+            &:disabled {
+                cursor: default;
+                border: v.$color-primary-disabled solid 2px;
+                background: v.$color-primary-disabled;
+            }
         }
+    }
+}
+
+.table-content {
+    .table-search {
+        display: flex;
+
+        .search {
+            max-width: 350px;
+            box-sizing: border-box;
+        }
+    }
+
+    .table-responsive {
+        width: 100%;
+        
+        table {
+            border-spacing: 0;
+            width: 100%;
+    
+            thead {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none; 
+                
+                tr {
+                    th {
+                        padding: 5px 5px 3px 5px;
+                        font-size: 1.1em;
+                        text-align: left;
+                        border-bottom: 2px solid v.$border-color;
+                    }
+                }
+            }
+    
+            tbody {
+                tr {
+                    td {
+                        padding: 5px;
+                        text-align: left;
+                        border-bottom: 1px solid v.$border-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .table-pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0 5px 0;
+
+        .pagination {
+            display: flex;
+
+            button {
+                border-radius: 0;
+                height: 38px;
+                width: 38px;
+                padding: 8px 5px 5px 5px;
+
+                &:first-child{
+                    border-top-left-radius: v.$btn-radius;
+                    border-bottom-left-radius: v.$btn-radius;
+                }
+
+                &:last-child{
+                    border-top-right-radius: v.$btn-radius;
+                    border-bottom-right-radius: v.$btn-radius;
+                }
+
+                &.active {
+                    background-color: v.$color-white;
+                    color: v.$color-primary;
+                }
+            }
+        }
+    }
+}
+
+.row {
+    display: flex;
+}
+
+.align-content-start {
+    align-content: flex-start; 
+}
+
+.align-content-end {
+    align-content: flex-end; 
+}
+
+.align-content-between {
+    align-content: space-between; 
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+}
+
+.justify-content-end {
+    justify-content: flex-end; 
+}
+
+.justify-content-between {
+    justify-content: space-between; 
+}
+
+@for $i from 1 through 20 {
+    .mt-#{$i}px{
+        margin-top: #{$i}px !important;
+    }
+}
+
+@for $i from 1 through 20 {
+    .pt-#{$i}px{
+        padding-top: #{$i}px !important;
+    }
+}
+
+@for $i from 1 through 20 {
+    .pb-#{$i}px{
+        padding-bottom: #{$i}px !important;
+    }
+}
+
+@for $i from 1 through 4 {
+    .grid-#{$i} {
+        @include m.grid(#{$i});
+    }
+}
+
+@for $i from 0 through 20 {
+    .grid-t-#{$i}-1 {
+        @include m.grid-t-2(#{$i}fr, 1fr);
+    }
+}
+
+@for $i from 1 through 20 {
+    .g-#{$i}px{
+        gap: #{$i}px !important;
     }
 }

@@ -1,0 +1,409 @@
+@use '../base/vars' as v;
+
+.app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+
+    .navbar {
+        display: flex;
+        background: v.$color-primary;
+        width: 100%;
+        height: v.$navbar-height;
+        padding: 7px 12px 7px 12px;
+        box-sizing: border-box;
+        z-index: 2;
+
+        .btn-menu {
+            position: relative;
+
+            .btn {
+                width: 45px;
+                height: 100%;
+                padding: 6px 2px 6px 2px;
+                border: 0;
+
+                svg {
+                    height: 100%;
+
+                    path:nth-child(-n + 4) {
+                        stroke: v.$color-white;;
+                    }
+                }                
+
+                &.active {
+                    background: v.$color-primary-hover;
+
+                    svg {
+                        transform: rotate(90deg) scale(1.2);
+                    }                    
+                }
+
+                &:hover {
+                    background: v.$color-primary-hover;
+
+                    svg {
+                        animation: spinzoom 300ms forwards;
+                    }
+                    
+                }
+
+                &:not(:hover) {
+                    &:not(&.active){
+                        svg {
+                            animation: reverse-spinzoom 300ms forwards;
+                        }
+                    }
+                }
+            }               
+        }
+    }
+
+    .menu {
+        position: fixed;
+        width: v.$menu-width;
+        height: 100%;
+        padding: 16px;
+        background: v.$menu-bg;
+        box-shadow: 0 4px 4px 1px rgba(#000000, 0.4);
+        box-sizing: border-box;
+        transform: translateX(v.$menu-width * -1);
+        transition: transform ease 500ms;
+        z-index: 1;
+
+        &.active {
+            transform: translateX(v.$menu-width * 0);
+        }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            list-style: none;
+            width: 100%;
+
+            li {
+                display: flex;
+                
+                &.separation {
+                    color: v.$color-white;
+                    font-size: v.$input-font-size + 0.13;
+                    font-weight: 700;
+                }
+
+                span {
+                    display: flex;
+                    gap: 6px;
+                    align-items: center;
+                    width: 100%;
+                }
+
+                a {
+                    display: flex;
+                    gap: 6px;              
+                    width: 100%;
+                    padding: 8px;
+                    color: v.$color-white;
+                    font-size: v.$input-font-size;
+                    font-weight: 600;
+                    text-decoration: none;
+                    border-radius: v.$btn-radius - 3;
+                    border-left: 5px solid v.$color-white;
+                    box-sizing: border-box;
+                    transition: background ease 200ms, border-left ease 200ms;
+                    
+                    svg {
+                        font-size: v.$input-font-size + 0.3;
+                    }
+
+                    &:hover {
+                        background: v.$color-white;
+                        color: v.$color-primary;
+                        border-left: 5px solid v.$color-primary;
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        position: relative;
+        height: calc(100% - v.$navbar-height);
+        margin: 0 0 0 0;
+        box-sizing: border-box;
+        background: v.$bg-content;
+        transition: margin ease 500ms;
+        z-index: 0;
+        
+        &.active {
+            margin: 0 0 0 v.$menu-width;            
+        }
+        
+        .info-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: v.$info-bar-height;
+            background: v.$color-white;
+            padding: 15px 20px 15px 20px;
+            //box-shadow: v.$boxshadow;
+            border-bottom: 1px solid v.$border-color;
+            box-sizing: border-box;
+
+            ul {
+                display: flex;
+                gap: 5px;
+                list-style: none;
+
+                .active {
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .body {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px 10px 20px;
+            box-sizing: border-box;
+
+            .info-panel {
+                position: relative;
+                display: flex;
+                gap: 2px;
+                padding: 20px;
+                width: 100%;
+                border: 1px solid v.$border-color;
+                border-radius: v.$btn-radius;
+                box-sizing: border-box;
+                
+                .bar {
+                    position: absolute;
+                    height: 100%;
+                    width: 6px;
+                    background: v.$color-primary;
+                    top: 0;
+                    left: 0;
+                    border-top-left-radius: v.$btn-radius;
+                    border-bottom-left-radius: v.$btn-radius;
+                }
+
+                .info {
+                    display: flex;
+                    justify-content: flex-start;
+                    width: 50%;
+
+                    .icon {
+                        display: flex;
+                        background: v.$color-primary;
+                        border-radius: 50%;
+                        padding: 18px;
+                        font-size: 20px;
+                        color: v.$color-white;
+                    }
+                }
+
+                .data {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-end;
+                    width: 50%;
+                }
+
+                &.dark {
+                    .bar {
+                        background: v.$menu-bg;
+                    }
+
+                    .info {                       
+                        .icon {                            
+                            background: v.$menu-bg;
+                        }
+                    }
+                }
+
+                &.danger {
+                    .bar {
+                        background: v.$color-danger;
+                    }
+
+                    .info {                       
+                        .icon {                            
+                            background: v.$color-danger;
+                        }
+                    }
+                }
+            }
+
+            .panel {
+                border: 1px solid v.$border-color;
+                border-radius: v.$btn-radius;
+                box-sizing: border-box;
+
+                .header{
+                    display: flex;
+                    width: 100%;
+                    padding: 10px 16px 10px 16px;
+                    background: v.$color-primary;
+                    border-top-left-radius: v.$btn-radius;
+                    border-top-right-radius: v.$btn-radius;
+                    box-sizing: border-box;
+
+                    .title {
+                        font-size: 1.1em;
+                        color: v.$color-white;
+                    }
+                }
+
+                .body{
+                    padding: 5px 11px 5px 11px;
+                    box-sizing: border-box;
+                }
+            }
+        }
+    }
+
+    .window {
+        position: absolute;
+        margin: v.$navbar-height + 5px 5px 5px 5px;        
+        box-sizing: border-box;
+        border-radius: v.$btn-radius;
+        min-width: 500px;         
+        box-shadow: v.$boxshadow;   
+        z-index: 100;
+
+        .header  {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 8px;
+            background: v.$color-primary;                
+            padding: 10px 10px 10px 16px;
+            color: v.$color-white;
+            border-top-left-radius: v.$btn-radius;
+            border-top-right-radius: v.$btn-radius;
+            box-sizing: border-box;
+
+            .title {                    
+                font-size: 1.1em;
+            }
+
+            .actions {
+                display: flex;
+                gap: 4px;
+                font-size: v.$input-font-size + 0.3;
+
+                .close, .min {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    padding: 4px;
+                    width: 20px;
+                    height: 20px;
+                    box-sizing: border-box;
+                    
+                    &:hover {
+                        color: v.$color-primary;
+                        background: v.$color-white;
+                    }
+                }
+            }
+        }
+
+        .body {
+            height: 100%;
+            min-height: 80px;
+            padding: 6px 16px 10px 16px;
+            background: v.$color-white;
+            border-bottom-left-radius: v.$btn-radius;
+            border-bottom-right-radius: v.$btn-radius;
+        }
+    }
+
+    .float-alert {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 370px;
+        background: v.$color-dark;
+        border-radius: v.$btn-radius;
+        box-sizing: border-box;
+        box-shadow: v.$boxshadow;
+        margin: 8px 6px 8px 6px;
+        z-index: 9999;
+        
+        .header, .body {
+            display: flex;
+        }
+
+        .header {            
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px 2px 12px;
+
+            .title {
+                color: v.$color-white;
+            }
+
+            .actions {
+                display: flex;
+                align-items: center;
+
+                svg {
+                    color: v.$color-white;
+                }
+
+                .close, .min {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    padding: 4px;
+                    width: 20px;
+                    height: 20px;
+                    box-sizing: border-box;
+                    
+                    &:hover {                        
+                        background: v.$color-white;
+
+                        svg {
+                            color: v.$color-dark;
+                        }
+                    }
+                }
+            }
+        }
+
+        .body {
+            padding: 1px 12px 10px 12px;
+            color: v.$color-white;
+        }
+
+        &.danger {
+            background: v.$color-danger;
+        }
+    }
+}
+
+
+@keyframes spinzoom {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    100% {
+        transform: rotate(90deg) scale(1.2);
+    }
+}
+
+@keyframes reverse-spinzoom {
+    0% {
+        transform: rotate(90deg) scale(1.2);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
