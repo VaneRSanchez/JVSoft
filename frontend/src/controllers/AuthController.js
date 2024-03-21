@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 import { applyInputEffects } from '../assets/js/script';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import logo from '../assets/images/logo-l.png';
+import logo2 from '../assets/images/logo4.png';
 
 function AuthController() {
   useEffect(() => {
@@ -19,8 +21,9 @@ function AuthController() {
           </div>
           <div className='container'>
             <div className='slogan'>
-              <h1 className='title'>JVSoft</h1>
-              <h2 className='text'>¡El mejor software para tu restaurante!</h2>
+              <img src={logo2} alt='JVSoft' height={90} width={135} />
+              <h1 className='title'>¡Bienvenidos!</h1>
+              <h2 className='text'>El mejor software para tu restaurante</h2>
             </div>              
           </div>          
         </div>
@@ -32,6 +35,9 @@ function AuthController() {
           </div>
           <div className='container'>
             <div className='view'>
+              <div className='logo'>
+                <img src={logo} alt='JVSoft' height={60} width={170} /> 
+              </div> 
               <div className='input-group'>                
                 <div className='input'>
                   <label htmlFor='user'>Usuario</label>

@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faCheckCircle, faFont, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import Alert from '../Alert';
-import { applyInputEffects } from '../../assets/js/script';
-import configData from '../../config.json';
+import Alert from './Alert';
+import { applyInputEffects } from '../assets/js/script';
+import configData from '../config.json';
 
-const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
-    const [categoriesData, setCategoriesData] = useState({
-        name: null,
-    });
+const SendData = ({ endpoint, type, data, body, newAlert, removeAlert, handleClose, reloadTable }) => {
+    const [myData, setMyData] = useState(data);
     const [btnSubmit, setBtnSubmit] = useState(false);
 
     useEffect(() => {
-        applyInputEffects();
+        applyInputEffects();      
     }, []);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setCategoriesData({ ...categoriesData, [name]: value });
+        setMyData({ ...myData, [name]: value });
     };
 
     const handleSubmit = async (event) => {
@@ -28,8 +26,15 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
         setBtnSubmit(true);
 
         try {
-            const resp = await axios.post(`${configData.api_url}/product/categories`, categoriesData);
-            const resp_data = resp.data;
+            let resp;
+
+            if(type === 'POST'){
+                resp = await axios.post(`${configData.api_url}${endpoint}`, myData);
+            } else if(type === 'PUT'){
+                resp = await axios.put(`${configData.api_url}${endpoint}`, myData);
+            }
+
+            const resp_data = resp.data;            
 
             const alert_id = uuidv4();
             if(!resp_data.success){    
@@ -72,19 +77,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div className='input-group'>                
-                <div className='input'>
-                    <label htmlFor='name'>Nombre</label>
-                    <FontAwesomeIcon icon={faFont} />
-                    <input type='text' id='name' name='name' value={categoriesData.name || ''} onChange={handleInputChange} />
-                </div>
-                <div className='bar'></div>
-            </div>
-            <button type='submit' className='btn btn-sm btn-primary mt-10px' disabled={btnSubmit}><FontAwesomeIcon icon={faAdd} /> Agregar</button>
-        </form>
-    );
+    return React.cloneElement(body, { myData: myData, btnSubmit: btnSubmit, handleSubmit: handleSubmit, handleInputChange: handleInputChange });
 };
 
-export default Add;
+export default SendData;

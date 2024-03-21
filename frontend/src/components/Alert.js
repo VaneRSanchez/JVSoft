@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const Alert = ({id, title, body, color, removeAlert }) => {
+const Alert = ({id, title, body, color, removeAlert, timeout }) => {
     const [isClosing, setIsClosing] = useState(false);
     
     const handleClose = () => {   
@@ -12,6 +12,18 @@ const Alert = ({id, title, body, color, removeAlert }) => {
             removeAlert(id);
         }, 500);
     };
+
+    useEffect(() => {
+       if(timeout){
+        setTimeout(function(){
+            setIsClosing(true);
+
+            setTimeout(function(){
+                removeAlert(id);
+            }, 500);
+        }, timeout);
+       }
+    }, [timeout, id, removeAlert]);
       
     return(      
         <div className={`float-alert ${color} animate__animated animate__faster ${isClosing ? 'animate__fadeOut' : 'animate__fadeIn'}`}>

@@ -3,8 +3,9 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight, faSearch, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { applyInputEffects } from '../assets/js/script';
+import configData from '../config.json';
 
-const Table = () => {
+const Table = ({ endpoint, columns, tbody}) => {
     const [data, setData] = useState([]);
     const [tableData, setTableData] = useState({
         search: '',
@@ -15,10 +16,12 @@ const Table = () => {
     });
     const [totalPages, setTotalPages] = useState(1);
 
+    const maxButtonsToShow = 5;
+
     useEffect(() => {
         applyInputEffects();
 
-        let url = 'http://192.168.0.179:8000/api/product/categories';
+        let url = `${configData.api_url}${endpoint}`;
         const params = new URLSearchParams();
 
         for (const [key, value] of Object.entries(tableData)) {
@@ -41,7 +44,7 @@ const Table = () => {
         }).catch(error => {
             console.error('Error fetching data: ', error);
         });
-    }, [tableData]);
+    }, [tableData, endpoint]);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -77,6 +80,30 @@ const Table = () => {
         setTableData({ ...tableData, order_by: column, order: newOrder });
     };
 
+    const renderPaginationButtons = () => {
+        const buttons = [];
+        let startPage = Math.max(1, tableData.page - Math.floor(maxButtonsToShow / 2));
+        const endPage = Math.min(totalPages, startPage + maxButtonsToShow - 1);
+
+        if (totalPages - tableData.page < Math.floor(maxButtonsToShow / 2)) {
+            startPage = Math.max(1, totalPages - maxButtonsToShow + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            buttons.push(
+                <button
+                    className={`btn btn-primary ${tableData.page === i ? 'active' : ''}`}
+                    key={i}
+                    onClick={() => handlePageChange(i)}
+                >
+                    {i}
+                </button>
+            );
+        }
+
+        return buttons;
+    };
+
     return (
         <div className='table-content'>
             <div className='table-search'>
@@ -93,35 +120,17 @@ const Table = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th onClick={() => handleSort('id')}>
-                                ID{' '}
-                                {tableData.order_by === 'id' && (
+                            {Object.keys(columns).map((fieldName) => (
+                                <th key={fieldName} onClick={() => handleSort(fieldName)}>
+                                    {columns[fieldName]}{' '}
+                                    {tableData.order_by === fieldName && (
                                     tableData.order === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />
-                                )}
-                            </th>
-                            <th onClick={() => handleSort('name')}>
-                                Nombre{' '}
-                                {tableData.order_by === 'name' && (
-                                    tableData.order === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />
-                                )}
-                            </th>
-                            <th onClick={() => handleSort('status')}>
-                                Estatus{' '}
-                                {tableData.order_by === 'status' && (
-                                    tableData.order === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />
-                                )}
-                            </th>
+                                    )}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {data.map((entry, index) => (
-                            <tr key={index}>
-                                <td>{entry.id}</td>
-                                <td>{entry.name}</td>
-                                <td>{entry.status}</td>
-                            </tr>
-                        ))}
-                    </tbody>
+                    {React.cloneElement(tbody, { data: data })} 
                 </table>
             </div>
             <div className='table-pagination'>
@@ -131,15 +140,12 @@ const Table = () => {
                 <div className='pagination'>
                     <button className='btn btn-primary' onClick={handleFirstPage}><FontAwesomeIcon icon={faAngleDoubleLeft} /></button>
                     <button className='btn btn-primary' onClick={handlePrevPage}><FontAwesomeIcon icon={faAngleLeft} /></button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            className={`btn btn-primary ${tableData.page === index + 1 ? 'active' : ''}`}
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+                    {totalPages <= maxButtonsToShow ?
+                        renderPaginationButtons() :
+                        tableData.page <= Math.floor(maxButtonsToShow / 2) + 1 ?
+                            renderPaginationButtons().slice(0, maxButtonsToShow) :
+                            renderPaginationButtons().slice(-maxButtonsToShow)
+                    }
                     <button className='btn btn-primary' onClick={handleNextPage}><FontAwesomeIcon icon={faAngleRight} /></button>
                     <button className='btn btn-primary' onClick={handleLastPage}><FontAwesomeIcon icon={faAngleDoubleRight} /></button>
                 </div>

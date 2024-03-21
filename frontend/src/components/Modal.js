@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const Modal = ({id, title, body, removeModal}) => {
-    const [position, setPosition] = useState({ x: window.innerWidth / 2 - 200, y: 0 });
+const Modal = ({id, color, title, body, removeModal}) => {
+    const [position, setPosition] = useState({ x: window.innerWidth / 2 - 200, y: -55 });
     const [isClosing, setIsClosing] = useState(false);
+    const modalRef = useRef(null);
 
     const handleDrag = (e, ui) => {
         const { x, y } = ui;
@@ -26,8 +27,9 @@ const Modal = ({id, title, body, removeModal}) => {
             bounds='parent'
             position={position}
             onDrag={handleDrag}
+            nodeRef={modalRef}
         >        
-            <div className={`window animate__animated animate__faster ${isClosing ? 'animate__fadeOut' : 'animate__fadeIn'}`}>
+            <div className={`window window-${color} animate__animated animate__faster ${isClosing ? 'animate__fadeOut' : 'animate__fadeIn'}`} ref={modalRef}>
                 <div className='header'>
                     <h3 className='title'>{title}</h3>
                     <div className='actions'>
@@ -35,7 +37,7 @@ const Modal = ({id, title, body, removeModal}) => {
                     </div>
                 </div>
                 <div className='body'>
-                    {body}
+                    {React.cloneElement(body, { handleClose: handleClose })} 
                 </div>
             </div>
         </Draggable>

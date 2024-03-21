@@ -105,6 +105,38 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
             background: v.$color-primary;
         }
     }
+
+    &.input {
+        &-warning {
+            &:hover {
+                label {
+                    color: v.$color-warning;
+                }
+        
+                svg {
+                    color: v.$color-warning;
+                }
+        
+                .bar {
+                    background: v.$color-warning;
+                }
+            }
+
+            &.active { 
+                label {
+                    color: v.$color-body;
+                }
+
+                svg {
+                    color: v.$color-warning;
+                }
+        
+                .bar {
+                    background: v.$color-warning;
+                }
+            }
+        }
+    }
 }
 
 .form-checkbox {
@@ -253,6 +285,23 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
                 background: v.$color-primary-disabled;
             }
         }
+
+        &-warning {
+            border: v.$color-warning solid 2px;
+            background: v.$color-warning;
+            color: v.$color-white;
+
+            &:hover {
+                border: v.$color-warning-hover solid 2px;
+                background-color: v.$color-warning-hover;
+            }
+
+            &:disabled {
+                cursor: default;
+                border: v.$color-warning-disabled solid 2px;
+                background: v.$color-warning-disabled;
+            }
+        }
     }
 }
 
@@ -291,6 +340,10 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
     
             tbody {
                 tr {
+                    &:hover {
+                        background: v.$color-white-hover;
+                    }
+
                     td {
                         padding: 5px;
                         text-align: left;
@@ -327,11 +380,26 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
                 }
 
                 &.active {
-                    background-color: v.$color-white;
+                    background-color: v.$color-white-hover;
                     color: v.$color-primary;
+                    border: 1px solid v.$color-white-hover;
                 }
             }
         }
+    }
+}
+
+.badge {
+    padding: 2px 8px 2px 8px;
+    background: v.$color-primary;
+    color: v.$color-white;
+    font-weight: 600;
+    border-radius: v.$btn-radius;
+    box-sizing: border-box;
+    font-size: v.$input-font-size;
+
+    &.danger {
+        background: v.$color-danger;
     }
 }
 

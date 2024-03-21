@@ -91,6 +91,13 @@
                 width: 100%;
                 max-width: 600px;
                 box-sizing: border-box;
+                
+                .logo {
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
 
                 .remember-forgot {
                     display: flex;

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd, faList, faUserLock } from '@fortawesome/free-solid-svg-icons'
-import MyIcon from '../components/MyIcon';
-import Modal from '../components/Modal';
-import Add from '../components/product_categories/Add';
-import Table from '../components/Table';
+import { faList, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import ProductCategories from '../components/product_categories/ProductCategories'
+import logo from '../assets/images/logo3.png';
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -17,7 +16,7 @@ function AppController() {
 
   const newModal = ({id, title, app}) => {
     const existingModal = modals.find(modal => modal.id === id);
-    
+    console.log(existingModal)
     if (!existingModal) {
       setModals(prevmodals => [...prevmodals, { id, title, app }]);
     }
@@ -29,7 +28,6 @@ function AppController() {
 
   const newAlert = ({id, alert}) => {
     const existingAlert = alerts.find(alert => alert.id === id);
-    
     if (!existingAlert) {
       setAlerts(prevAlerts => [...prevAlerts, { id, alert }]);
     }
@@ -40,99 +38,31 @@ function AppController() {
   };
 
   return (
-    <div className='app'>
-      <nav className='navbar'>
-        <div className='btn-menu'>
-          <button className={menuActive ? 'btn active' : 'btn'} onClick={menuClick}>
-            <MyIcon icon='menu' />
-          </button>
-        </div>
-      </nav>
-      {alerts.map(alert => alert.alert)}
-      {modals.map(modal => modal.app)}
-      <nav className={menuActive ? 'menu active' : 'menu'}>
-        <ul>
-          <li className='separation'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
-          <li><a href='https://g.com'><FontAwesomeIcon icon={faList} /> Categorias de producto</a></li>
-        </ul>
-      </nav>
-      <section className={menuActive ? 'content active' : 'content'}>
-        <div className='info-bar'>
-          <h3>Categorias de producto</h3>
+    <Router>
+      <div className='app'>
+        <nav className='navbar'>
+          <div className='btn-menu'>
+            <button className={menuActive ? 'btn active' : 'btn'} onClick={menuClick}>
+            <img src={logo} alt='JVSoft' height={42} width={130} />         
+            </button>
+          </div>
+         
+        </nav>
+        {alerts.map(alert => alert.alert)}
+        {modals.map(modal => modal.app)}
+        <nav className={menuActive ? 'menu active' : 'menu'}>
           <ul>
-            <li>Administracion</li>
-            <li className='active'>/</li>
-            <li className='active'>Categorias de producto</li>
+            <li className='separation'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
+            <li><Link to="/product/categories"><FontAwesomeIcon icon={faList} /> Categorias de producto</Link></li>
           </ul>
-        </div>        
-        <div className='body g-8px'>
-          <div className='grid-3 g-6px'>
-            <div className='info-panel'>
-              <div className='bar'></div>
-              <div className='info'>
-                <div className='icon'>
-                  <FontAwesomeIcon icon={faList} />
-                </div>
-              </div>
-              <div className='data'>
-                <h2>0</h2>
-                <span>Usuarios</span>
-              </div>
-            </div>
-            <div className='info-panel dark'>
-              <div className='bar'></div>
-              <div className='info'>
-                <div className='icon'>
-                  <FontAwesomeIcon icon={faList} />
-                </div>
-              </div>
-              <div className='data'>
-                <h2>0</h2>
-                <span>Usuarios</span>
-              </div>
-            </div>
-            <div className='info-panel danger'>
-            <div className='bar'></div>
-              <div className='info'>
-                <div className='icon'>
-                  <FontAwesomeIcon icon={faList} />
-                </div>
-              </div>
-              <div className='data'>
-                <h2>0</h2>
-                <span>Usuarios</span>
-              </div>
-              </div>
-          </div>
-          <div className='grid-t-4-1 g-6px'>
-            <div className='panel'>
-              <div className='header'>
-                <h3 className='title'>Categorias</h3>
-              </div>
-              <div className='body'>
-                <Table />
-              </div>
-            </div>
-            <div className='panel'>
-              <div className='header'>
-                <h3 className='title'>Acciones</h3>
-              </div>
-              <div className='body pt-8px pb-8px'>
-                <button 
-                  className='btn btn-sm btn-primary' 
-                  onClick={() => newModal({
-                    'id': 'product-categories-add-modal',
-                    'app': <Modal id={'product-categories-add-modal'} title={'Agregar categoria de producto'} body={<Add newAlert={newAlert} removeAlert={removeAlert} />} removeModal={removeModal} />
-                  })}
-                >
-                  <FontAwesomeIcon icon={faAdd} /> Agregar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>        
-      </section>      
-    </div>
+        </nav>
+        <section className={menuActive ? 'content active' : 'content'}>
+          <Routes>
+            <Route path="/product/categories" element={<ProductCategories newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
+          </Routes>
+        </section>      
+      </div>
+    </Router>
   );
 }
 
