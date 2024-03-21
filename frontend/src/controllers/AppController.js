@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faList, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import { faList, faTimesCircle, faUserLock } from '@fortawesome/free-solid-svg-icons'
 import ProductCategories from '../components/product_categories/ProductCategories'
 import logo from '../assets/images/logo3.png';
+import Alert from '../components/Alert';
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -16,9 +18,15 @@ function AppController() {
 
   const newModal = ({id, title, app}) => {
     const existingModal = modals.find(modal => modal.id === id);
-    console.log(existingModal)
-    if (!existingModal) {
+    
+    if (!existingModal) {      
       setModals(prevmodals => [...prevmodals, { id, title, app }]);
+    } else {
+      const alert_id = uuidv4();
+      newAlert({
+          'id': alert_id,
+          'alert': <Alert key={alert_id} id={alert_id} title={<><FontAwesomeIcon icon={faTimesCircle} /> Error!</>} body={'Ya tienes esa ventana abierta.'} color={'danger'} removeAlert={removeAlert} timeout={3000} />
+      });
     }
   };
 
@@ -48,7 +56,9 @@ function AppController() {
           </div>
          
         </nav>
-        {alerts.map(alert => alert.alert)}
+        <div className='float-alerts'>
+          {alerts.map(alert => alert.alert)}
+        </div>
         {modals.map(modal => modal.app)}
         <nav className={menuActive ? 'menu active' : 'menu'}>
           <ul>

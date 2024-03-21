@@ -257,6 +257,7 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; 
+    transition: background 200ms ease, border 200ms ease;
 
     &:hover {
         background: v.$bg-bar;

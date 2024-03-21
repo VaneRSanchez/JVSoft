@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd, faList } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faEdit, faList } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal';
 import Add from '../product_categories/Add';
 import Table from '../Table';
@@ -8,7 +8,14 @@ import TableBody from '../product_categories/TableBody';
 
 const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const [forceTableUpdate, setForceTableUpdate] = useState(false);
-    const [btnEdit, setBtnEdit] = useState(null);
+    const [btnEdit, setBtnEdit] = useState(
+        <button 
+            className='btn btn-sm btn-warning'
+            disabled
+        >
+            <FontAwesomeIcon icon={faEdit} /> Editar
+        </button>
+    );
 
     const columnsTable = {
         'id': 'ID',

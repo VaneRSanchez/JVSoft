@@ -22,6 +22,7 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                             data={{
                                 'id': entry.id,
                                 'name': entry.name,
+                                'status': entry.status,
                             }}
                             body={<Edit />}
                             newAlert={newAlert} 
@@ -31,7 +32,16 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                     } 
                     removeModal={removeModal} 
                 />
-        })
+        });
+
+        setBtnEdit( 
+            <button 
+                className='btn btn-sm btn-warning'
+                disabled
+            >
+                <FontAwesomeIcon icon={faEdit} /> Editar
+            </button>
+        );
     };  
 
     const handleClick = (entry) => {
