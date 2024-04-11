@@ -27,8 +27,10 @@ SECRET_KEY = 'django-insecure-#diuqlde70!m=1bgk^^0490iqv&zhfn(*rrm7rfnf&xc*568(l
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.0.196',
-    '192.168.0.103'
+    '192.168.0.179',
+    '192.168.0.103',
+    'lfw8w794-8000.usw3.devtunnels.ms',
+    'localhost'
 ]
 
 
@@ -76,6 +78,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
+    'http://192.168.1.50:3000',
     'http://localhost:3000',
 ]
 
