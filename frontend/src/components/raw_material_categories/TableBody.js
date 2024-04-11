@@ -8,16 +8,16 @@ import Edit from './Edit';
 const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAlert, reloadTable }) => {
     const handleEdit = (entry) => {
         newModal({
-            'id': `product-categories-edit-${entry.id}-modal`,
+            'id': `raw-material-categories-edit-${entry.id}-modal`,
             'app':  
                 <Modal 
-                    key={`product-categories-edit-${entry.id}-modal`} 
-                    id={`product-categories-edit-${entry.id}-modal`} 
+                    key={`raw-material-categories-edit-${entry.id}-modal`} 
+                    id={`raw-material-categories-edit-${entry.id}-modal`} 
                     color={'warning'}
-                    title={'Editar categoría de producto'} 
+                    title={'Editar categoría de materia prima'} 
                     body={
                         <SendData
-                            endpoint={'/product/categories'}
+                            endpoint={'/raw/material/categories'}
                             type={'PUT'}
                             data={{
                                 'id': entry.id,

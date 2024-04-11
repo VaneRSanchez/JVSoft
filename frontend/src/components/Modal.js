@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const Modal = ({id, color, title, body, removeModal}) => {
-    const [position, setPosition] = useState({ x: window.innerWidth / 2 - 200, y: -55 });
+    const [position, setPosition] = useState({ x: window.innerWidth / 2 - 180, y: -55 });
     const [isClosing, setIsClosing] = useState(false);
     const modalRef = useRef(null);
 
@@ -23,7 +23,7 @@ const Modal = ({id, color, title, body, removeModal}) => {
       
     return(
         <Draggable            
-            handle='.header'
+            handle='.title'
             bounds='parent'
             position={position}
             onDrag={handleDrag}

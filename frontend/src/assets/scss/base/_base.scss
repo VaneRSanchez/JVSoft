@@ -258,6 +258,7 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
     -ms-user-select: none;
     user-select: none; 
     transition: background 200ms ease, border 200ms ease;
+    z-index: 99;
 
     &:hover {
         background: v.$bg-bar;
@@ -390,6 +391,198 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
     }
 }
 
+.switch-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 11px;
+
+    .switch {
+        font-size: 12px;
+        position: relative;
+        display: inline-block;
+        width: 3.5em;
+        height: 2em;
+    
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+    
+            &:checked {
+                & + .slider {
+                    background: #b84fce;
+                }
+    
+                & + .slider:before {
+                    transform: translateX(1.6em);
+                    width: 2em;
+                    height: 2em;
+                    bottom: 0;
+                }
+            }
+    
+            &:focus + .slider {
+                box-shadow: 0 0 1px #b84fce;
+            }
+        }
+    
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #d4acfb;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        
+            &::before{
+                position: absolute;
+                content: "";
+                height: 1.4em;
+                width: 1.4em;
+                left: 0.3em;
+                bottom: 0.3em;
+                background-color: white;
+                border-radius: 50px;
+                box-shadow: 0 0px 20px rgba(0,0,0,0.4);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+        }  
+        
+        
+    }
+
+    &.switch {
+        &-warning {
+            .switch{
+                input {            
+                    &:checked {
+                        & + .slider {
+                            background: v.$color-warning;
+                        }
+                    }
+            
+                    &:focus + .slider {
+                        box-shadow: 0 0 1px v.$color-warning;
+                    }
+                }
+
+                .slider {
+                    background: v.$color-warning-disabled;
+                
+                    &::before{
+                        background-color: white;
+                    }
+                }  
+            }             
+        }
+    }
+}
+
+.select-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-weight: 600;
+    color: v.$bg-bar;
+    cursor: default;
+
+    &.active {
+        color: v.$color-primary;
+
+        .select {
+            border-bottom: 2px solid v.$color-primary;
+
+            &.left {
+                transform: rotate(100grad);
+            }
+        }
+
+        .select-menu {
+            color: black;
+            max-height: 150px;
+            overflow: auto;
+
+            #search {
+                opacity: 1;
+            }
+
+            ul {
+                opacity: 1;   
+            }
+        }
+    }
+
+    .input {
+        display: none;
+    }
+
+    .select {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0 6px 0;
+        border-bottom: 2px solid v.$bg-bar;
+        
+        span {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .left {
+            transition: transform ease 500ms;
+        }
+    }
+
+    .select-menu {
+        background: #ededed;
+        font-weight: 500;
+        max-height: 0;
+        transition: max-height ease 500ms;
+
+        &.hidden {
+            display: none;
+        }
+
+        #search {
+            display: flex;
+            width: 100%;
+            padding: 10px 10px 2px 10px;
+            box-sizing: border-box;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            background: transparent;
+            opacity: 0;
+            transition: opacity ease 500ms;
+
+            &:focus {
+                outline: none;
+            }
+
+            &::placeholder {
+                text-align: start;
+            }
+        }
+
+        ul {
+            opacity: 0;
+            list-style: none;
+            transition: opacity ease 500ms;
+
+            li {
+                padding: 5px 10px 5px 10px;
+
+                &:hover {
+                    background: v.$color-primary;
+                    color: v.$color-white;
+                }
+            }
+        }
+    }
+}
+
 .badge {
     padding: 2px 8px 2px 8px;
     background: v.$color-primary;
@@ -459,6 +652,10 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
 @for $i from 0 through 20 {
     .grid-t-#{$i}-1 {
         @include m.grid-t-2(#{$i}fr, 1fr);
+
+        @include m.MediaTablet {
+            @include m.grid(1fr);
+        }  
     }
 }
 

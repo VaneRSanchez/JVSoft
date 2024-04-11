@@ -8,6 +8,7 @@ import configData from '../config.json';
 const Table = ({ endpoint, columns, tbody}) => {
     const [data, setData] = useState([]);
     const [tableData, setTableData] = useState({
+        query: 'table',
         search: '',
         page: 1,
         order_by: 'id',

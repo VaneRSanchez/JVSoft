@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faList, faTimesCircle, faUserLock } from '@fortawesome/free-solid-svg-icons'
+import { faBurger, faCarrot, faDiagramProject, faList, faRuler, faTimesCircle, faUserLock } from '@fortawesome/free-solid-svg-icons'
 import ProductCategories from '../components/product_categories/ProductCategories'
+import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
 import logo from '../assets/images/logo3.png';
 import Alert from '../components/Alert';
+import Units from '../components/units/Units';
+import MovementTypes from '../components/movement_types/MovementTypes';
+import Products from '../components/products/Products';
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -63,12 +67,20 @@ function AppController() {
         <nav className={menuActive ? 'menu active' : 'menu'}>
           <ul>
             <li className='separation'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
-            <li><Link to="/product/categories"><FontAwesomeIcon icon={faList} /> Categorias de producto</Link></li>
+            <li><Link to="/movement/types"><FontAwesomeIcon icon={faDiagramProject} /> Tipos de movimiento</Link></li>
+            <li><Link to="/products"><FontAwesomeIcon icon={faBurger} /> Productos</Link></li>
+            <li><Link to="/product/categories"><FontAwesomeIcon icon={faList} /> Categorías de producto</Link></li>
+            <li><Link to="/raw/material/categories"><FontAwesomeIcon icon={faCarrot} /> Categorías de materias primas</Link></li>
+            <li><Link to="/units"><FontAwesomeIcon icon={faRuler} /> Unidades</Link></li>
           </ul>
         </nav>
         <section className={menuActive ? 'content active' : 'content'}>
           <Routes>
+            <Route path="/movement/types" element={<MovementTypes newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
+            <Route path="/products" element={<Products newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
             <Route path="/product/categories" element={<ProductCategories newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
+            <Route path="/raw/material/categories" element={<RawMaterialCategories newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
+            <Route path="/units" element={<Units newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
           </Routes>
         </section>      
       </div>

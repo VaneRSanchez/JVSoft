@@ -6,7 +6,7 @@ import Add from './Add';
 import Table from '../Table';
 import TableBody from './TableBody';
 
-const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => {
+const Products = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const [forceTableUpdate, setForceTableUpdate] = useState(false);
     const [btnEdit, setBtnEdit] = useState(
         <button 
@@ -20,7 +20,10 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
     const columnsTable = {
         'id': 'ID',
         'name': 'Nombre',
-        'status': 'Estatus'
+        'description': 'Descripcion',
+        'price': 'Precio',
+        'product_categories.name': 'Categoria',
+        'status': 'Estatus',
     };
       
     const reloadTable = () => {
@@ -30,11 +33,11 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
     return (
         <div>
             <div className='info-bar'>
-                <h3>Categorías de producto</h3>
+                <h3>Productos</h3>
                 <ul>
                     <li>Administracion</li>
                     <li className='active'>/</li>
-                    <li className='active'>Categorías de producto</li>
+                    <li className='active'>Productos</li>
                 </ul>
             </div>        
             <div className='body g-8px'>
@@ -79,12 +82,12 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
                 <div className='grid-t-4-1 g-6px'>
                     <div className='panel'>
                         <div className='header'>
-                            <h3 className='title'>Categorías</h3>
+                            <h3 className='title'>Productos</h3>
                         </div>
                         <div className='body'>
                             <Table 
                                 key={forceTableUpdate} 
-                                endpoint={'/product/categories'} 
+                                endpoint={'/products'} 
                                 columns={columnsTable} 
                                 tbody={
                                     <TableBody 
@@ -107,8 +110,8 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
                             <button 
                                 className='btn btn-sm btn-primary' 
                                 onClick={() => newModal({
-                                    'id': 'product-categories-add-modal',
-                                    'app': <Modal key={'product-categories-add-modal'} id={'product-categories-add-modal'} color={'primary'} title={'Agregar categoría de producto'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
+                                    'id': 'products-add-modal',
+                                    'app': <Modal key={'products-add-modal'} id={'products-add-modal'} color={'primary'} title={'Agregar producto'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
                                 })}
                             >
                                 <FontAwesomeIcon icon={faAdd} /> Agregar
@@ -122,4 +125,4 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
     );
 }
 
-export default ProductCategories;
+export default Products;

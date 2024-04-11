@@ -6,7 +6,7 @@ import Add from './Add';
 import Table from '../Table';
 import TableBody from './TableBody';
 
-const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => {
+const RawMaterialCategories = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const [forceTableUpdate, setForceTableUpdate] = useState(false);
     const [btnEdit, setBtnEdit] = useState(
         <button 
@@ -30,11 +30,11 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
     return (
         <div>
             <div className='info-bar'>
-                <h3>Categorías de producto</h3>
+                <h3>Categorías de materias primas</h3>
                 <ul>
                     <li>Administracion</li>
                     <li className='active'>/</li>
-                    <li className='active'>Categorías de producto</li>
+                    <li className='active'>Categorías de materias primas</li>
                 </ul>
             </div>        
             <div className='body g-8px'>
@@ -84,7 +84,7 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
                         <div className='body'>
                             <Table 
                                 key={forceTableUpdate} 
-                                endpoint={'/product/categories'} 
+                                endpoint={'/raw/material/categories'} 
                                 columns={columnsTable} 
                                 tbody={
                                     <TableBody 
@@ -107,8 +107,8 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
                             <button 
                                 className='btn btn-sm btn-primary' 
                                 onClick={() => newModal({
-                                    'id': 'product-categories-add-modal',
-                                    'app': <Modal key={'product-categories-add-modal'} id={'product-categories-add-modal'} color={'primary'} title={'Agregar categoría de producto'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
+                                    'id': 'raw-material-categories-add-modal',
+                                    'app': <Modal key={'raw-material-categories-add-modal'} id={'raw-material-categories-add-modal'} color={'primary'} title={'Agregar categoría de materia prima'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
                                 })}
                             >
                                 <FontAwesomeIcon icon={faAdd} /> Agregar
@@ -122,4 +122,4 @@ const ProductCategories = ({ newModal, removeModal, newAlert, removeAlert }) => 
     );
 }
 
-export default ProductCategories;
+export default RawMaterialCategories;

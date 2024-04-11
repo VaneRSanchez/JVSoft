@@ -28,7 +28,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
         setBtnSubmit(true);
 
         try {
-            const resp = await axios.post(`${configData.api_url}/product/categories`, tableData);
+            const resp = await axios.post(`${configData.api_url}/raw/material/categories`, tableData);
             const resp_data = resp.data;
 
             const alert_id = uuidv4();

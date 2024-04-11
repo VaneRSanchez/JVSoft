@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFont, faSave } from '@fortawesome/free-solid-svg-icons';
 import { applyInputEffects } from '../../assets/js/script';
 
 const Edit = ({ myData, btnSubmit, handleSubmit, handleInputChange }) => {
-    const [isChecked, setIsChecked] = useState(myData.status);
-
-    const handleToggle = () => {
-        const newStatus = !isChecked;
-        setIsChecked(newStatus);
-        handleInputChange({ target: { name: 'status', value: newStatus } })
-    };
-
     useEffect(() => {
         applyInputEffects();      
     }, []);
@@ -25,16 +17,7 @@ const Edit = ({ myData, btnSubmit, handleSubmit, handleInputChange }) => {
                     <input type='text' id='name' name='name' value={myData.name || ''} onChange={handleInputChange} />
                 </div>
                 <div className='bar'></div>
-            </div>
-            <div className='switch-group switch-warning'>                
-                <label class='switch'>
-                    <input type='checkbox' id='state' name='state' checked={isChecked} onChange={handleToggle} />
-                    <span class='slider'></span>
-                </label>
-                <label htmlFor='state'>
-                    Visible
-                </label>
-            </div>            
+            </div>           
             <button type='submit' className='btn btn-sm btn-warning mt-10px' disabled={btnSubmit}><FontAwesomeIcon icon={faSave} /> Guardar</button>
         </form>
     );

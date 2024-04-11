@@ -1,4 +1,5 @@
 @use '../base/vars' as v;
+@use '../mixins/base' as m;
 
 .app {
     position: relative;
@@ -87,7 +88,6 @@
         ul {
             display: flex;
             flex-direction: column;
-            gap: 6px;
             list-style: none;
             width: 100%;
 
@@ -95,7 +95,7 @@
                 display: flex;
                 
                 &.separation {
-                    color: v.$color-body;
+                    color: v.$color-primary;
                     font-size: v.$input-font-size + 0.13;
                     font-weight: 700;
                 }
@@ -103,13 +103,12 @@
                 span {
                     display: flex;
                     gap: 6px;
-                    align-items: center;
+                    //align-items: center;
                     width: 100%;
                 }
 
                 a {
-                    display: flex;
-                    gap: 6px;              
+                    display: inline-block;
                     width: 100%;
                     padding: 8px;
                     color: v.$color-body;
@@ -119,9 +118,13 @@
                     border-radius: v.$btn-radius - 3;
                     border-left: 5px solid v.$color-white;
                     box-sizing: border-box;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     
                     svg {
                         font-size: v.$input-font-size + 0.3;
+                        margin-right: 4px;
                     }
 
                     &:hover {
@@ -144,7 +147,11 @@
         z-index: 0;
         
         &.active {
-            margin: 0 0 0 v.$menu-width;            
+            margin: 0 0 0 v.$menu-width;
+            
+            @include m.MediaTablet {
+                margin: 0 0 0 0;
+            }       
         }
         
         .info-bar {
@@ -284,14 +291,16 @@
         box-shadow: v.$boxshadow;   
         z-index: 100;
 
+        @include m.MediaPhone {
+            min-width: 350px;   
+        }  
+
         .header  {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 8px;
-            background: v.$color-primary;                
-            padding: 10px 10px 10px 16px;
+            background: v.$color-primary; 
             color: v.$color-white;
             border-top-left-radius: v.$btn-radius;
             border-top-right-radius: v.$btn-radius;
@@ -299,12 +308,15 @@
 
             .title {                    
                 font-size: 1.1em;
+                padding: 10px 10px 10px 16px;
+                box-sizing: border-box;
             }
 
             .actions {
                 display: flex;
                 gap: 4px;
                 font-size: v.$input-font-size + 0.3;
+                padding: 10px;
 
                 .close, .min {
                     display: flex;

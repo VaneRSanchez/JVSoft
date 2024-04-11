@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faEye, faEyeSlash, faFingerprint } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faFingerprint } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal';
 import SendData from '../SendData';
 import Edit from './Edit';
@@ -8,16 +8,16 @@ import Edit from './Edit';
 const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAlert, reloadTable }) => {
     const handleEdit = (entry) => {
         newModal({
-            'id': `product-categories-edit-${entry.id}-modal`,
+            'id': `units-edit-${entry.id}-modal`,
             'app':  
                 <Modal 
-                    key={`product-categories-edit-${entry.id}-modal`} 
-                    id={`product-categories-edit-${entry.id}-modal`} 
+                    key={`units-edit-${entry.id}-modal`} 
+                    id={`units-edit-${entry.id}-modal`} 
                     color={'warning'}
-                    title={'Editar categoría de producto'} 
+                    title={'Editar unidad'} 
                     body={
                         <SendData
-                            endpoint={'/product/categories'}
+                            endpoint={'/units'}
                             type={'PUT'}
                             data={{
                                 'id': entry.id,
@@ -64,7 +64,6 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                 >
                     <td><span className='badge'><FontAwesomeIcon icon={faFingerprint} /> {entry.id}</span></td>
                     <td>{entry.name}</td>
-                    <td>{entry.status === false ? <span className='badge danger'><FontAwesomeIcon icon={faEyeSlash} /> Oculto</span> : <span className='badge'><FontAwesomeIcon icon={faEye} /> Visible</span>}</td>
                 </tr>
             ))}
         </tbody>
