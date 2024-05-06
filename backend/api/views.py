@@ -9,9 +9,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
 from django.utils import timezone
+from datetime import timedelta
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
-from django.db.models import Q
+from django.db.models import Q, Sum, F, Case, When, IntegerField
 import api.serializers as jv_serializers
 import api.models as jv_models
 import datetime
@@ -45,8 +46,8 @@ class SignInAPIView(APIView):
         return JsonResponse({'success': False, 'msg': 'Usuario o contraseña incorrecta.'}, status = 401)
 
 class ProductCategoriesAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -110,8 +111,8 @@ class ProductCategoriesAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
     
 class RawMaterialCategoriesAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -175,8 +176,8 @@ class RawMaterialCategoriesAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
     
 class UnitsAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -239,8 +240,8 @@ class UnitsAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
 class MovementTypesAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -303,8 +304,8 @@ class MovementTypesAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
     
 class SalesAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -367,8 +368,8 @@ class SalesAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
 class ProductsAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -393,8 +394,12 @@ class ProductsAPIView(APIView):
                 Q(name__icontains = search_query) |
                 Q(description__icontains = search_query)|
                 Q(price__icontains = search_query) |
-                Q(status__icontains = search_query) 
+                Q(status__icontains = search_query) |
+                Q(product_categories__name__icontains=search_query)
             )
+
+            if order_by == 'product_categories.name':
+                order_by = 'product_categories__name'
 
             if order == 'desc':
                 order_by = f'-{order_by}'
@@ -434,8 +439,8 @@ class ProductsAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
 class RawMaterialsAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
@@ -500,14 +505,14 @@ class RawMaterialsAPIView(APIView):
         serializer.save()
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
-class InventaryRawMaterialsAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+class InventoryRawMaterialsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
-            return jv_models.InventaryRawMaterialsModel.objects.get(pk = pk)
-        except jv_models.InventaryRawMaterialsModel.DoesNotExist:
+            return jv_models.InventoryRawMaterialsModel.objects.get(pk = pk)
+        except jv_models.InventoryRawMaterialsModel.DoesNotExist:
             raise JsonResponse({'success': False, 'msg': 'El inventario de la materia prima no existe.'}, status = 404)
 
     def get(self, request):
@@ -522,7 +527,7 @@ class InventaryRawMaterialsAPIView(APIView):
             if order_by == 'actions':
                 order_by = 'id'
 
-            inventary_raw_materials = jv_models.InventaryRawMaterialsModel.objects.filter(
+            inventory_raw_materials = jv_models.InventoryRawMaterialsModel.objects.filter(
                 Q(id__icontains = search_query) |
                 Q(quantity__icontains = search_query) |
                 Q(date_reg__icontains = search_query)|
@@ -532,24 +537,82 @@ class InventaryRawMaterialsAPIView(APIView):
             if order == 'desc':
                 order_by = f'-{order_by}'
 
-            inventary_raw_materials = inventary_raw_materials.order_by(order_by)
-            paginator = Paginator(inventary_raw_materials, show)
-            inventary_raw_materials_page = paginator.page(page_number)
+            inventory_raw_materials = inventory_raw_materials.order_by(order_by)
+            paginator = Paginator(inventory_raw_materials, show)
+            inventory_raw_materials_page = paginator.page(page_number)
 
-            serialized = jv_serializers.InventaryRawMaterialsTableSerializer(inventary_raw_materials_page, many = True)
+            serialized = jv_serializers.InventoryRawMaterialsTableSerializer(inventory_raw_materials_page, many = True)
 
             return JsonResponse({
                 'success': True,
                 'data': serialized.data,
                 'total_pages': paginator.num_pages,
-                'current_page': inventary_raw_materials_page.number
+                'current_page': inventory_raw_materials_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'table_raw_materials':
+            search_query = request.query_params.get('search', '')
+            page_number = request.query_params.get('page', 1)
+            order_by = request.query_params.get('order_by', 'id')
+            order = request.query_params.get('order', 'asc')
+            show = request.query_params.get('show', 10)
+            
+            if order_by == 'actions':
+                order_by = 'id'
+
+            raw_materials = jv_models.RawMaterialsModel.objects.filter(
+                Q(id__icontains = search_query) |
+                Q(name__icontains = search_query) |
+                Q(description__icontains = search_query)|
+                Q(price__icontains = search_query) |
+                Q(status__icontains = search_query) 
+            )
+
+            if order == 'desc':
+                order_by = f'-{order_by}'
+
+            raw_materials = raw_materials.order_by(order_by)
+            paginator = Paginator(raw_materials, show)
+            raw_materials_page = paginator.page(page_number)
+
+            serialized = jv_serializers.InventoryFindRawMaterialsTableSerializer(raw_materials_page, many = True)
+
+            return JsonResponse({
+                'success': True,
+                'data': serialized.data,
+                'total_pages': paginator.num_pages,
+                'current_page': raw_materials_page.number
+            })
+        elif query == 'statistics':
+            current_date = timezone.now().date()
+            two_days = current_date + timedelta(days=2)
+
+            count_movements = jv_models.InventoryRawMaterialsModel.objects.filter(
+            ).count()
+
+            count_raw_materials_expiration = jv_models.InventoryRawMaterialsModel.objects.filter(
+                date_exp__gt = current_date, 
+                date_exp__lte = two_days,
+                status = 1
+            ).count()
+
+            count_raw_materials_expired = jv_models.InventoryRawMaterialsModel.objects.filter(
+                date_exp__lte = current_date,
+                status = 1
+            ).count()
+
+
+            return JsonResponse({
+                'success': True,
+                'count_movements': count_movements,
+                'count_raw_materials_expiration': count_raw_materials_expiration,
+                'count_raw_materials_expired': count_raw_materials_expired,
+            })
+        
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
+    
     def post(self, request):
-        serializer = jv_serializers.InventaryRawMaterialsAddSerializer(data = request.data)
+        serializer = jv_serializers.InventoryRawMaterialsAddSerializer(data = request.data)
         if not serializer.is_valid():
             return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
         
@@ -559,21 +622,33 @@ class InventaryRawMaterialsAPIView(APIView):
     def put(self, request):
         id = request.data.get('id') 
         instance = self.get_object(id)
-        serializer = jv_serializers.InventaryRawMaterialsEditSerializer(instance, data = request.data)
+        serializer = jv_serializers.InventoryRawMaterialsEditSerializer(instance, data = request.data)
         if not serializer.is_valid():
             return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
 
         serializer.save()
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
+    
+    def delete(self, request):
+        id = request.data.get('id') 
+        request.data.update({'status': False})
+        instance = self.get_object(id)
+        serializer = jv_serializers.InventoryRawMaterialsCancelSerializer(instance, data = request.data)
+        if not serializer.is_valid():
+            return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
 
-class ProductsMateriaAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+        serializer.save()
+        return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
+    
+
+class ProductsMaterialsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:
-            return jv_models.ProductsMateriaModel.objects.get(pk = pk)
-        except jv_models.ProductsMateriaModel.DoesNotExist:
+            return jv_models.ProductsMaterialsModel.objects.get(pk = pk)
+        except jv_models.ProductsMaterialsModel.DoesNotExist:
             raise JsonResponse({'success': False, 'msg': 'El producto de la materia prima no existe.'}, status = 404)
 
     def get(self, request):
@@ -588,7 +663,7 @@ class ProductsMateriaAPIView(APIView):
             if order_by == 'actions':
                 order_by = 'id'
 
-            products_materia = jv_models.ProductsMateriaModel.objects.filter(
+            products_materials = jv_models.ProductsMaterialsModel.objects.filter(
                 Q(id__icontains = search_query) |
                 Q(quantity__icontains = search_query) 
             )
@@ -596,24 +671,24 @@ class ProductsMateriaAPIView(APIView):
             if order == 'desc':
                 order_by = f'-{order_by}'
 
-            products_materia = products_materia.order_by(order_by)
-            paginator = Paginator(products_materia, show)
-            products_materia_page = paginator.page(page_number)
+            products_materials = products_materials.order_by(order_by)
+            paginator = Paginator(products_materials, show)
+            products_materials_page = paginator.page(page_number)
 
-            serialized = jv_serializers.ProductsMateriaTableSerializer(products_materia_page, many = True)
+            serialized = jv_serializers.ProductsMaterialsTableSerializer(products_materials_page, many = True)
 
             return JsonResponse({
                 'success': True,
                 'data': serialized.data,
                 'total_pages': paginator.num_pages,
-                'current_page': products_materia_page.number
+                'current_page': products_materials_page.number
             })
         elif query == 'info':
             pass
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
-        serializer = jv_serializers.ProductsMateriaAddSerializer(data = request.data)
+        serializer = jv_serializers.ProductsMaterialsAddSerializer(data = request.data)
         if not serializer.is_valid():
             return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
         
@@ -623,7 +698,7 @@ class ProductsMateriaAPIView(APIView):
     def put(self, request):
         id = request.data.get('id') 
         instance = self.get_object(id)
-        serializer = jv_serializers.ProductsMateriaEditSerializer(instance, data = request.data)
+        serializer = jv_serializers.ProductsMaterialsEditSerializer(instance, data = request.data)
         if not serializer.is_valid():
             return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
 
@@ -631,8 +706,8 @@ class ProductsMateriaAPIView(APIView):
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
 class DetailSalesAPIView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
   
     def get_object(self, pk):
         try:

@@ -62,25 +62,26 @@ class RawMaterialsModel(models.Model):
     class Meta: 
         db_table = 'raw_materials'
 
-class InventaryRawMaterialsModel(models.Model):
+class InventoryRawMaterialsModel(models.Model):
     id = models.AutoField(primary_key = True)
     quantity = models.IntegerField(default = 0, null = False, blank = False)
     date_reg = models.DateTimeField(default = timezone.now, null = False, blank = False)
     date_exp = models.DateTimeField(null = False, blank = False)
+    status = models.BooleanField(default = True, null = False, blank = False)
     raw_materials = models.ForeignKey(RawMaterialsModel, on_delete = models.RESTRICT)
     movement_types = models.ForeignKey(MovementTypesModel, on_delete = models.RESTRICT)
-
+    
     class Meta: 
-        db_table = 'inventary_raw_materials'
+        db_table = 'inventory_raw_materials'
 
-class ProductsMateriaModel(models.Model):
+class ProductsMaterialsModel(models.Model):
     id = models.AutoField(primary_key = True)
     quantity = models.IntegerField(default = 0, null = False, blank = False)
     products = models.ForeignKey(ProductsModel, on_delete = models.RESTRICT)
     raw_materials = models.ForeignKey(RawMaterialsModel, on_delete = models.RESTRICT)
 
     class Meta: 
-        db_table = 'products_materia'
+        db_table = 'products_materials'
 
 class DetailSalesModel(models.Model):
     id = models.AutoField(primary_key = True)

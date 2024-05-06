@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 import api.models as jv_models
 from django.db import IntegrityError
+from django.db.models import Sum
 
 #Productos categorias
 class ProductCategoriesTableSerializer(serializers.ModelSerializer):
@@ -26,6 +27,7 @@ class ProductCategoriesEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero es invalido. Por favor, proporciona un numero valido.',
     })
     name = serializers.CharField(error_messages={
         'required': 'El nombre es requerido. Por favor, proporciona un nombre valido.',
@@ -37,7 +39,7 @@ class ProductCategoriesEditSerializer(serializers.ModelSerializer):
         'required': 'El estatus es requerido. Por favor, proporciona un estatus valido.',
         'blank': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
         'null': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
-        'valid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
     })
 
     class Meta:
@@ -67,6 +69,8 @@ class RawMaterialCategoriesEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+
     })
     name = serializers.CharField(error_messages={
         'required': 'El nombre es requerido. Por favor, proporciona un nombre valido.',
@@ -78,7 +82,7 @@ class RawMaterialCategoriesEditSerializer(serializers.ModelSerializer):
         'required': 'El estatus es requerido. Por favor, proporciona un estatus valido.',
         'blank': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
         'null': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
-        'valid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
     })
     
     class Meta:
@@ -108,6 +112,8 @@ class UnitsEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+
     })
     name = serializers.CharField(error_messages={
         'required': 'El nombre es requerido. Por favor, proporciona un nombre valido.',
@@ -144,6 +150,8 @@ class MovementTypesEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+
     })
     name = serializers.CharField(error_messages={
         'required': 'El nombre es requerido. Por favor, proporciona un nombre valido.',
@@ -163,7 +171,6 @@ class SalesTableSerializer(serializers.ModelSerializer):
         fields = ['id','total']
 
 class SalesAddSerializer(serializers.ModelSerializer):
-
     total = serializers.FloatField(error_messages= {
         'required': 'El total es requerido. Por favor, proporciona un nombre valido.',
         'blank': 'El total no puede estar en blanco. Por favor, proporciona un nombre valido.',
@@ -180,6 +187,7 @@ class SalesEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero es invalido. Por favor, proporciona un numero valido.',
     })
 
     total = serializers.CharField(error_messages={
@@ -225,6 +233,8 @@ class ProductsAddSerializer(serializers.ModelSerializer):
         'required': 'La categoria de producto es requerido. Por favor, proporciona una categoria de producto valido.',
         'blank': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
         'null': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+
     })
 
     class Meta:
@@ -243,9 +253,10 @@ class ProductsAddSerializer(serializers.ModelSerializer):
         
 class ProductsEditSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(error_messages={
-        'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
-        'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
-        'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'required': 'El id del producto es requerido. Por favor, proporciona un id del producto valido.',
+        'blank': 'El id del producto no puede estar en blanco. Por favor, proporciona un id del producto valido.',
+        'null': 'El id del producto no puede estar en blanco. Por favor, proporciona un id del producto valido.',
+        'invalid': 'El id del producto es invalido. Por favor, proporciona un id del producto valido.',
     })
 
     name = serializers.CharField(error_messages= {
@@ -266,28 +277,47 @@ class ProductsEditSerializer(serializers.ModelSerializer):
         'required': 'El precio es requerido. Por favor, proporciona un precio valido.',
         'blank': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
         'null': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
     })
 
     status = serializers.BooleanField(error_messages={
         'required': 'El estatus es requerido. Por favor, proporciona un estatus valido.',
         'blank': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
         'null': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
-        'valid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
     })
 
-    
+    product_categories_id = serializers.IntegerField(error_messages= {
+        'required': 'La categoria de producto es requerido. Por favor, proporciona una categoria de producto valido.',
+        'blank': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
+        'null': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
+        'invalid': 'La categoria es invalida. Por favor, proporciona una categoria valido.',
+    })
+
     class Meta:
         model = jv_models.ProductsModel
-        fields = ['id','name','description', 'price']
+        fields = ['id','name','description', 'price','status', 'product_categories_id']
 
+    def create(self, validated_data):
+        try:
+            product_categories_id = validated_data.get('product_categories_id')
+            if product_categories_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "La categoria de producto es invalido. Por favor, proporciona una categoria de producto valido."})
+
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"success": False, "msg": "No se pudo agregar, verifique los datos."})
+        
 #RawMaterials
 class RawMaterialsTableSerializer(serializers.ModelSerializer):
+    raw_material_categories = RawMaterialCategoriesTableSerializer()
+    units = UnitsTableSerializer()
+
     class Meta:
         model = jv_models.RawMaterialsModel
-        fields = ['id','name', 'description', 'price', 'status']
+        fields = ['id','name', 'description', 'price', 'units', 'raw_material_categories', 'status']
 
 class RawMaterialsAddSerializer(serializers.ModelSerializer):
-
     name = serializers.CharField(error_messages= {
         'required': 'El nombre es requerido. Por favor, proporciona un nombre valido.',
         'blank': 'El nombre no puede estar en blanco. Por favor, proporciona un nombre valido.',
@@ -306,28 +336,54 @@ class RawMaterialsAddSerializer(serializers.ModelSerializer):
         'required': 'El precio es requerido. Por favor, proporciona un precio valido.',
         'blank': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
         'null': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
+        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
+
     })
 
     raw_material_categories_id = serializers.IntegerField(error_messages= {
-        'required': 'La categoria de producto es requerido. Por favor, proporciona una categoria de producto valido.',
-        'blank': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
-        'null': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
+        'required': 'La categoria de la materia prima es requerida. Por favor, proporciona una categoria de la materia prima valida.',
+        'blank': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'null': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'invalid': 'La categoria de la materia prima es invalida. Por favor, proporciona una categoria de la materia prima valida.',
+
     })
 
     units_id = serializers.IntegerField(error_messages= {
-        'required': 'La categoria de producto es requerido. Por favor, proporciona una categoria de producto valido.',
-        'blank': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
-        'null': 'La categoria de producto no puede estar en blanco. Por favor, proporciona una categoria de producto valido.',
+        'required': 'La unidad es requerida. Por favor, proporciona una unidad valida.',
+        'blank': 'La unidad no puede estar en blanco. Por favor, proporciona una unidad valida.',
+        'null': 'La unidad no puede estar en blanco. Por favor, proporciona una unidad valida.',
+        'invalid': 'La  unidad es invalida. Por favor, proporciona una unidad valida.',
+
     })
+
+    raw_material_categories_id = serializers.IntegerField(error_messages= {
+        'required': 'La categoria de la materia prima es requerida. Por favor, proporciona una categoria de la materia prima valida.',
+        'blank': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'null': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'invalid': 'La categoria de la materia prima es invalida. Por favor, proporciona una categoria de la materia prima valida.',
+    })
+
     class Meta:
         model = jv_models.RawMaterialsModel
         fields = ['id', 'name', 'description', 'price', 'raw_material_categories_id', 'units_id']
 
+    def create(self, validated_data):
+        try:
+            raw_material_categories_id = validated_data.get('raw_material_categories_id')
+            if raw_material_categories_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "La categoria de la materia prima es invalido. Por favor, proporciona una categoria de materia prima valido."})
+
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"success": False, "msg": "No se pudo agregar, verifique los datos."})
+        
 class RawMaterialsEditSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(error_messages={
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero de la categoria  es invalida. Por favor, proporciona un numero de la categoria valida.',
+
     })
 
     name = serializers.CharField(error_messages= {
@@ -348,39 +404,86 @@ class RawMaterialsEditSerializer(serializers.ModelSerializer):
         'required': 'El precio es requerido. Por favor, proporciona un precio valido.',
         'blank': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
         'null': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
+        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
+
     })
 
-    status = serializers.BooleanField(error_messages={
-        'required': 'El estatus es requerido. Por favor, proporciona un estatus valido.',
-        'blank': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
-        'null': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
-        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+    units_id = serializers.IntegerField(error_messages= {
+        'required': 'La unidad es requerida. Por favor, proporciona una unidad valida.',
+        'blank': 'La unidad no puede estar en blanco. Por favor, proporciona una unidad valida.',
+        'null': 'La unidad no puede estar en blanco. Por favor, proporciona una unidad valida.',
+        'invalid': 'La unidad es invalida. Por favor, proporciona una unidad valida.',
+
     })
 
+    raw_material_categories_id = serializers.IntegerField(error_messages= {
+        'required': 'La categoria de la materia prima es requerida. Por favor, proporciona una categoria de la materia prima valida.',
+        'blank': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'null': 'La categoria de la materia prima no puede estar en blanco. Por favor, proporciona una categoria de la materia prima valida.',
+        'invalid': 'La categoria de la materia prima es invalida. Por favor, proporciona una categoria de la materia prima valida.',
+    })
     
     class Meta:
         model = jv_models.RawMaterialsModel
-        fields = ['id','name','description', 'price']
+        fields = ['id','name','description', 'price','units_id', 'raw_material_categories_id']
 
+    def create(self, validated_data):
+        try:
+            raw_material_categories_id = validated_data.get('raw_material_categories_id')
+            if raw_material_categories_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "La categoria de la materia prima es invalida. Por favor, proporciona una categoria de la materia prima valida."})
+
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"success": False, "msg": "No se pudo agregar, verifique los datos."})
+        
 #InventaryRawMaterials
-class InventaryRawMaterialsTableSerializer(serializers.ModelSerializer):
+class InventoryRawMaterialsTableSerializer(serializers.ModelSerializer):
+    raw_materials = RawMaterialsTableSerializer()
+    movement_types = MovementTypesTableSerializer()
+    
     class Meta:
-        model = jv_models.InventaryRawMaterialsModel
-        fields = ['id','quantity', 'date_reg', 'date_exp']
+        model = jv_models.InventoryRawMaterialsModel
+        fields = ['id','quantity', 'date_reg', 'date_exp', 'raw_materials', 'movement_types', 'status']
 
-class InventaryRawMaterialsAddSerializer(serializers.ModelSerializer):
+class InventoryFindRawMaterialsTableSerializer(serializers.ModelSerializer):
+    raw_material_categories = RawMaterialCategoriesTableSerializer()
+    total_quantity = serializers.SerializerMethodField()
+
+    class Meta:
+        model = jv_models.RawMaterialsModel
+        fields = ['id','name', 'price', 'raw_material_categories', 'status', 'total_quantity']
+
+    def get_total_quantity(self, obj):
+        total_entries = jv_models.InventoryRawMaterialsModel.objects.filter(
+            raw_materials = obj,
+            movement_types__id = 1,
+            status = 1
+        ).aggregate(total_entries=Sum('quantity'))['total_entries'] or 0
+
+        total_exits = jv_models.InventoryRawMaterialsModel.objects.filter(
+            raw_materials = obj,
+            movement_types__id = 2,
+            status = 1
+        ).aggregate(total_exits=Sum('quantity'))['total_exits'] or 0
+
+        total_quantity = total_entries - total_exits
+
+        return total_quantity
+    
+class InventoryRawMaterialsAddSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField(error_messages= {
         'required': 'La cantidad es requerida. Por favor, proporciona una cantidad valido.',
         'blank': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
         'null': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
-        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
+        'invalid': 'La cantidad es invalida. Por favor, proporciona una cantidad valida.',
     })
 
-    data_exp = serializers.DateTimeField(error_messages= {
+    date_exp = serializers.DateTimeField( format='%Y-%m-%dT%H', error_messages= {
         'required': 'La fecha de expiración es requerida. Por favor, proporciona una fecha de expiración valida.',
         'blank': 'fecha de expiración no puede estar en blanco. Por favor, proporciona una fecha de expiración valida.',
         'null': 'fecha de expiración no puede estar en blanco. Por favor, proporciona una fecha de expiración valida.',
-        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
+        'invalid': 'La fecha de expiración es invalida. Por favor, proporciona una fecha de expiración valid.',
     })
 
     raw_materials_id = serializers.IntegerField(error_messages= {
@@ -396,15 +499,52 @@ class InventaryRawMaterialsAddSerializer(serializers.ModelSerializer):
         'null': 'El tipo de movimiento no puede estar en blanco. Por favor, proporciona un tipo de movimiento valido.',
         'invalid': 'El tipo de movimiento es invalido. Por favor, proporciona un tipo de movimiento valido.',
     })
-    class Meta:
-        model = jv_models.InventaryRawMaterialsModel
-        fields = ['id', 'quantity', 'data_exp', 'raw_materials_id', 'movement_types_id']
 
-class InventaryRawMaterialsEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = jv_models.InventoryRawMaterialsModel
+        fields = ['id', 'quantity', 'date_exp', 'raw_materials_id', 'movement_types_id']
+    
+    def create(self, validated_data):
+        try:
+            movement_types_id = validated_data.get('movement_types_id')
+            if movement_types_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "El tipo de movimiento es invalido. Por favor, proporciona una categoria de materia prima valido."})
+            
+            raw_materials_id = validated_data.get('raw_materials_id')
+            if raw_materials_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "La materia prima es invalida. Por favor, proporciona una materia prima valida."})
+
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"success": False, "msg": "No se pudo agregar, verifique los datos."})
+
+class InventoryRawMaterialsCancelSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(error_messages={
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero de la categoria valido.',
+
+    })
+
+    status = serializers.BooleanField(error_messages={
+        'required': 'El estatus es requerido. Por favor, proporciona un estatus valido.',
+        'blank': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+        'null': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+        'invalid': 'El estatus no puede estar en blanco. Por favor, proporciona un estatus valido.',
+    })
+
+    class Meta:
+        model = jv_models.InventoryRawMaterialsModel
+        fields = ['id', 'status']
+    
+class InventoryRawMaterialsEditSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(error_messages={
+        'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
+        'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero de la categoria es invalido. Por favor, proporciona un numero de la categoriavalido.',
+
     })
 
     quantity = serializers.IntegerField(error_messages= {
@@ -414,7 +554,7 @@ class InventaryRawMaterialsEditSerializer(serializers.ModelSerializer):
         'invalid': 'La cantidad es invalida. Por favor, proporciona una cantidad valida.',
     })
 
-    data_exp = serializers.DateTimeField(error_messages= {
+    date_exp = serializers.DateTimeField(error_messages= {
         'required': 'La fecha de expiración es requerida. Por favor, proporciona una fecha de expiración valida.',
         'blank': 'La fecha de expiración no puede estar en blanco. Por favor, proporciona una fecha de expiración valida.',
         'null': 'La fecha de expiración no puede estar en blanco. Por favor, proporciona una fecha de expiración valida.',
@@ -435,16 +575,30 @@ class InventaryRawMaterialsEditSerializer(serializers.ModelSerializer):
         'invalid': 'El tipo de movimiento es invalido. Por favor, proporciona un tipo de movimiento valido.',
     })
     class Meta:
-        model = jv_models.InventaryRawMaterialsModel
-        fields = ['id', 'quantity', 'data_exp', 'raw_materials_id', 'movement_types_id']
+        model = jv_models.InventoryRawMaterialsModel
+        fields = ['id', 'quantity', 'date_exp', 'raw_materials_id', 'movement_types_id']
+    
+    def create(self, validated_data):
+        try:
+            movement_types_id = validated_data.get('movement_types_id')
+            if movement_types_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "El tipo de movimiento es invalido. Por favor, proporciona una categoria de materia prima valido."})
+            
+            raw_materials_id = validated_data.get('raw_materials_id')
+            if raw_materials_id == 0:
+                raise serializers.ValidationError({"success": False, "msg": "La materia prima es invalida. Por favor, proporciona una materia prima valida."})
 
-#ProductsMateria
-class ProductsMateriaTableSerializer(serializers.ModelSerializer):
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"success": False, "msg": "No se pudo agregar, verifique los datos."})
+        
+#ProductsMaterials
+class ProductsMaterialsTableSerializer(serializers.ModelSerializer):
     class Meta:
-        model = jv_models.ProductsMateriaModel
+        model = jv_models.ProductsMaterialsModel
         fields = ['id','quantity']
 
-class ProductsMateriaAddSerializer(serializers.ModelSerializer):
+class ProductsMaterialsAddSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField(error_messages= {
         'required': 'La cantidad es requerida. Por favor, proporciona una cantidad valido.',
         'blank': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
@@ -466,14 +620,15 @@ class ProductsMateriaAddSerializer(serializers.ModelSerializer):
         'invalid': 'La materia prima es invalido. Por favor, proporciona una materia prima valida.',
     })
     class Meta:
-        model = jv_models.ProductsMateriaModel
+        model = jv_models.ProductsMaterialsModel
         fields = ['id', 'quantity', 'raw_materials_id', 'products_id']
 
-class ProductsMateriaEditSerializer(serializers.ModelSerializer):
+class ProductsMaterialsEditSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(error_messages={
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero es invalido. Por favor, proporciona un numero valido.',
     })
 
     quantity = serializers.IntegerField(error_messages= {
@@ -494,10 +649,10 @@ class ProductsMateriaEditSerializer(serializers.ModelSerializer):
         'required': 'El producto es requerido. Por favor, proporciona un producto valido.',
         'blank': 'El producto no puede estar en blanco. Por favor, proporciona un producto valido.',
         'null': 'El productono puede estar en blanco. Por favor, proporciona un producto valido.',
-        'invalid': 'El productoes invalido. Por favor, proporciona un producto valido.',
+        'invalid': 'El producto es invalido. Por favor, proporciona un producto valido.',
     })
     class Meta:
-        model = jv_models.InventaryRawMaterialsModel
+        model = jv_models.ProductsMaterialsModel
         fields = ['id', 'quantity', 'data_exp', 'raw_materials_id', 'product_id']
 
 #DetailSales
@@ -516,9 +671,9 @@ class DetailSalesAddSerializer(serializers.ModelSerializer):
 
     data_reg = serializers.DateTimeField(error_messages= {
         'required': 'La fecha de registro es requerida. Por favor, proporciona una fecha de registro valida.',
-        'blank': 'fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'null': 'fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'invalid': 'El registro es invalido. Por favor, proporciona un precio valido.',
+        'blank': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
+        'null': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
+        'invalid': 'La fecha de registro es invalida. Por favor, proporciona un precio valida.',
     })
 
     products_id = serializers.IntegerField(error_messages= {
@@ -551,6 +706,8 @@ class DetailSalesEditSerializer(serializers.ModelSerializer):
         'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
         'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
         'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
+        'invalid': 'El numero de la categoria es invalido. Por favor, proporciona un numero de la categoria valido.',
+
     })
 
     price = serializers.FloatField(error_messages= {
@@ -562,9 +719,9 @@ class DetailSalesEditSerializer(serializers.ModelSerializer):
 
     data_reg = serializers.DateTimeField(error_messages= {
         'required': 'La fecha de registro es requerida. Por favor, proporciona una fecha de registro valida.',
-        'blank': 'fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'null': 'fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'invalid': 'El registro es invalido. Por favor, proporciona un precio valido.',
+        'blank': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
+        'null': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
+        'invalid': 'La fecha de registro es invalida. Por favor, proporciona una fecha de registro valida.',
     })
 
     product_id = serializers.IntegerField(error_messages= {
