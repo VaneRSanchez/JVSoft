@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd, faDiagramProject, faEdit, faList } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faBacon, faEdit } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal';
 import Add from './Add';
 import Table from '../Table';
 import TableBody from './TableBody';
 import { Requests } from '../../assets/js/Requests';
 
-const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
+const ProductsMaterials = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const [forceTableUpdate, setForceTableUpdate] = useState(false);
     const [btnEdit, setBtnEdit] = useState(
         <button 
@@ -23,7 +23,9 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
 
     const columnsTable = {
         'id': 'ID',
-        'name': 'Nombre',
+        'quantity': 'Cantidad',
+        'products.name': 'Productos',
+        'raw_materials.name': 'Materia',
     };
       
     const reloadTable = () => {
@@ -32,7 +34,7 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
 
     useEffect(() => {
         const setStatistics = async () => {
-            const response = await Requests({ endpoint: '/movement/types', method: 'GET', data: {query: 'statistics'} });
+            const response = await Requests({ endpoint: '/products/materials', method: 'GET', data: {query: 'statistics'} });
             if (response.data) {
                 setDataStatistics({
                     count_total: response.data.count_total
@@ -46,11 +48,11 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
     return (
         <div>
             <div className='info-bar'>
-                <h3>Tipos de movimiento</h3>
+                <h3>Productos y materias</h3>
                 <ul>
                     <li>Administracion</li>
                     <li className='active'>/</li>
-                    <li className='active'>Unidades</li>
+                    <li className='active'>Productos y materias</li>
                 </ul>
             </div>        
             <div className='body g-8px'>
@@ -59,7 +61,7 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
                         <div className='bar'></div>
                         <div className='info'>
                             <div className='icon'>
-                                <FontAwesomeIcon icon={faDiagramProject} />
+                                <FontAwesomeIcon icon={faBacon} />
                             </div>
                         </div>
                         <div className='data'>
@@ -71,12 +73,12 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
                 <div className='grid-t-4-1 g-6px'>
                     <div className='panel'>
                         <div className='header'>
-                            <h3 className='title'>Tipos</h3>
+                            <h3 className='title'>Materias primas</h3>
                         </div>
                         <div className='body'>
                             <Table 
                                 key={forceTableUpdate} 
-                                endpoint={'/movement/types'} 
+                                endpoint={'/products/materials'} 
                                 columns={columnsTable} 
                                 tbody={
                                     <TableBody 
@@ -99,8 +101,8 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
                             <button 
                                 className='btn btn-sm btn-primary' 
                                 onClick={() => newModal({
-                                    'id': 'movement-types-add-modal',
-                                    'app': <Modal key={'movement-types-add-modal'} id={'movement-types-add-modal'} color={'primary'} title={'Agregar tipo de movimiento'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
+                                    'id': 'products-materials-add-modal',
+                                    'app': <Modal key={'products-materials-add-modal'} id={'products-materials-add-modal'} color={'primary'} title={'Agregar producto y su materia'} body={<Add newAlert={newAlert} removeAlert={removeAlert} reloadTable={reloadTable} />} removeModal={removeModal} />
                                 })}
                             >
                                 <FontAwesomeIcon icon={faAdd} /> Agregar
@@ -114,4 +116,4 @@ const MovementTypes = ({ newModal, removeModal, newAlert, removeAlert }) => {
     );
 }
 
-export default MovementTypes;
+export default ProductsMaterials;

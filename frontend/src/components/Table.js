@@ -5,10 +5,10 @@ import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight, faSea
 import { applyInputEffects } from '../assets/js/script';
 import configData from '../config.json';
 
-const Table = ({ endpoint, columns, tbody}) => {
+const Table = ({ endpoint, columns, tbody, query_name = 'table'}) => {
     const [data, setData] = useState([]);
     const [tableData, setTableData] = useState({
-        query: 'table',
+        query: query_name,
         search: '',
         page: 1,
         order_by: 'id',
@@ -20,6 +20,7 @@ const Table = ({ endpoint, columns, tbody}) => {
     const maxButtonsToShow = 5;
 
     useEffect(() => {
+        const authToken = localStorage.getItem('authToken');
         applyInputEffects();
 
         let url = `${configData.api_url}${endpoint}`;
@@ -39,7 +40,12 @@ const Table = ({ endpoint, columns, tbody}) => {
 
         url += `?${params.toString()}`;
 
-        axios.get(url).then(response => {
+        axios.get(url,
+        { 
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        }).then(response => {
             setData(response.data.data);
             setTotalPages(response.data.total_pages);
         }).catch(error => {

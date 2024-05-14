@@ -6,10 +6,13 @@ import axios from 'axios';
 import Alert from '../Alert';
 import { applyInputEffects } from '../../assets/js/script';
 import configData from '../../config.json';
+import Select from '../Select';
 
 const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
-    const [tableData, setTableData] = useState({
-        name: null,
+    const [data, setData] = useState({
+        quantity: null,
+        producs_id: 0,
+        raw_materials_id: 0
     });
     const [btnSubmit, setBtnSubmit] = useState(false);
 
@@ -19,7 +22,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setTableData({ ...tableData, [name]: value });
+        setData({ ...data, [name]: value });
     };
 
     const handleSubmit = async (event) => {
@@ -29,8 +32,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
         try {
             const authToken = localStorage.getItem('authToken');
-            const resp = await axios.post(`${configData.api_url}/product/categories`, tableData,
-            { 
+            const resp = await axios.post(`${configData.api_url}/products/materials`, data, { 
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -82,12 +84,14 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
         <form onSubmit={handleSubmit}>
             <div className='input-group'>                
                 <div className='input'>
-                    <label htmlFor='name'>Nombre</label>
+                    <label htmlFor='quantity'>Cantidad</label>
                     <FontAwesomeIcon icon={faFont} />
-                    <input type='text' id='name' name='name' value={tableData.name || ''} onChange={handleInputChange} />
+                    <input type='numeer' id='quantity' name='quantity' value={data.quantity || ''} onChange={handleInputChange} />
                 </div>
                 <div className='bar'></div>
             </div>
+            <Select name={'products_id'} endpoint={'/products'} data={data} handleInputChange={handleInputChange} />
+            <Select name={'raw_materials_id'} endpoint={'/raw/materials'} data={data} handleInputChange={handleInputChange} />
             <button type='submit' className='btn btn-sm btn-primary mt-10px' disabled={btnSubmit}><FontAwesomeIcon icon={faAdd} /> Agregar</button>
         </form>
     );

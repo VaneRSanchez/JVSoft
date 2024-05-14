@@ -21,6 +21,7 @@ const SendData = ({ endpoint, type, data, body, newAlert, removeAlert, handleClo
     };
 
     const handleSubmit = async (event) => {
+        const authToken = localStorage.getItem('authToken');
         event.preventDefault();
         
         setBtnSubmit(true);
@@ -29,16 +30,31 @@ const SendData = ({ endpoint, type, data, body, newAlert, removeAlert, handleClo
             let resp;
 
             if(type === 'POST'){
-                resp = await axios.post(`${configData.api_url}${endpoint}`, myData);
+                resp = await axios.post(`${configData.api_url}${endpoint}`, myData, { 
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
             } else if(type === 'PUT'){
-                resp = await axios.put(`${configData.api_url}${endpoint}`, myData);
+                resp = await axios.put(`${configData.api_url}${endpoint}`, myData, { 
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+            } else if(type === 'DELETE'){
+                resp = await axios.delete(`${configData.api_url}${endpoint}`, {
+                    data: myData,
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
             }
 
             const resp_data = resp.data;            
 
             const alert_id = uuidv4();
             if(!resp_data.success){    
-                setBtnSubmit(false);            
+                setBtnSubmit(false); 
                 newAlert({
                     'id': alert_id,
                     'alert': <Alert key={alert_id} id={alert_id} title={<><FontAwesomeIcon icon={faTimesCircle} /> Error!</>} body={resp_data.msg} color={'danger'} removeAlert={removeAlert} timeout={3000} />
@@ -77,7 +93,7 @@ const SendData = ({ endpoint, type, data, body, newAlert, removeAlert, handleClo
         }
     };
 
-    return React.cloneElement(body, { myData: myData, btnSubmit: btnSubmit, handleSubmit: handleSubmit, handleInputChange: handleInputChange });
+    return React.cloneElement(body, { data: myData, btnSubmit: btnSubmit, handleSubmit: handleSubmit, handleInputChange: handleInputChange });
 };
 
 export default SendData;

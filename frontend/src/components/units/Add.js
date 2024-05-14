@@ -28,7 +28,12 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
         setBtnSubmit(true);
 
         try {
-            const resp = await axios.post(`${configData.api_url}/units`, tableData);
+            const authToken = localStorage.getItem('authToken');
+            const resp = await axios.post(`${configData.api_url}/units`, tableData, { 
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
             const resp_data = resp.data;
 
             const alert_id = uuidv4();

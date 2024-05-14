@@ -1,76 +1,96 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
-import { applyInputEffects } from '../assets/js/script';
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import logo from '../assets/images/logo-l.png';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import logo2 from '../assets/images/logo4.png';
+import SignIn from '../components/auth/SignIn';
+import Alert from '../components/Alert';
+import SignUp from '../components/auth/SignUp';
 
-function AuthController() {
-  useEffect(() => {
-    applyInputEffects();
-  }, []);
+function AuthController({ setAuth }) {
+  const [modals, setModals] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+
+  const newModal = ({id, title, app}) => {
+    const existingModal = modals.find(modal => modal.id === id);
+    
+    if (!existingModal) {      
+      setModals(prevmodals => [...prevmodals, { id, title, app }]);
+    } else {
+      const alert_id = uuidv4();
+      newAlert({
+          'id': alert_id,
+          'alert': <Alert key={alert_id} id={alert_id} title={<><FontAwesomeIcon icon={faTimesCircle} /> Error!</>} body={'Ya tienes esa ventana abierta.'} color={'danger'} removeAlert={removeAlert} timeout={3000} />
+      });
+    }
+  };
+
+  const removeModal = (id) => {
+    setModals(prevModals => prevModals.filter(modal => modal.id !== id));
+  };
+
+  const newAlert = ({id, alert}) => {
+    const existingAlert = alerts.find(alert => alert.id === id);
+    if (!existingAlert) {
+      setAlerts(prevAlerts => [...prevAlerts, { id, alert }]);
+    }
+  };
+
+  const removeAlert = (id) => {
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id));
+  };
+
+  const commonProps = {
+    newModal,
+    removeModal,
+    newAlert,
+    removeAlert,
+    Link,
+    setAuth
+  };
   
+  const renderRoute = (path, Component) => (
+    <Route path={path} element={<Component {...commonProps} />} />
+  );  
+
   return (
-    <div className='auth'>
-        <div className='info'>
-          <div className='edge'>
-            <svg viewBox='0 0 100 100'>
-              <path d='M 0 0 C 100 20, 100 100, 100 100 L 100 100 L 100 0 Z' fill='white' />
-            </svg>
+    <Router>
+      <div className='float-alerts'>
+        {alerts.map(alert => alert.alert)}
+      </div>
+      <div className='auth'>
+          <div className='info'>
+            <div className='edge'>
+              <svg viewBox='0 0 100 100'>
+                <path d='M 0 0 C 100 20, 100 100, 100 100 L 100 100 L 100 0 Z' fill='white' />
+              </svg>
+            </div>
+            <div className='container'>
+              <div className='slogan'>
+                <img src={logo2} alt='JVSoft' height={90} width={135} />
+                <h1 className='title'>¡Bienvenidos!</h1>
+                <h2 className='text'>El mejor software para tu restaurante</h2>
+              </div>              
+            </div>          
           </div>
-          <div className='container'>
-            <div className='slogan'>
-              <img src={logo2} alt='JVSoft' height={90} width={135} />
-              <h1 className='title'>¡Bienvenidos!</h1>
-              <h2 className='text'>El mejor software para tu restaurante</h2>
-            </div>              
-          </div>          
-        </div>
-        <div className='content'>
-          <div className='edge'>
-            <svg viewBox='0 0 100 100'>
-              <path d='M 0 0 C 100 0, 100 100, 100 100 L 100 100 L 100 0 Z' />
-            </svg>
-          </div>
-          <div className='container'>
-            <div className='view'>
-              <div className='logo'>
-                <img src={logo} alt='JVSoft' height={60} width={170} /> 
-              </div> 
-              <div className='input-group'>                
-                <div className='input'>
-                  <label htmlFor='user'>Usuario</label>
-                  <FontAwesomeIcon icon={faUser} />
-                  <input type='text' id='user' name='user' />
-                </div>
-                <div className='bar'></div>
-              </div>
-              <div className='input-group'>                
-                <div className='input'>
-                  <label htmlFor='password'>Contraseña</label>
-                  <FontAwesomeIcon icon={faEyeSlash} />
-                  <input type='password' id='password' name='password' />
-                </div>
-                <div className='bar'></div>
-              </div>
-              <div className='remember-forgot'>
-                <div className='form-checkbox'>
-                  <input className='checkbox' type='checkbox' id='remember' name='remember' />
-                  <label htmlFor='remember'>Mantener la sesión</label>
-                </div>
-                <div className='a-forgot'>
-                  <a href='https://google.com'>¿Has olvidado tu contraseña?</a>
-                </div>
-              </div>
-              <button className='btn btn-primary'><FontAwesomeIcon icon={faRightFromBracket} /> Iniciar sesion</button>
-              <div className='info-auth'>
-                <p>¿No tienes cuenta? <a href='https://google.com'>REGISTRARSE</a></p>
-              </div>
+          <div className='content'>
+            <div className='edge'>
+              <svg viewBox='0 0 100 100'>
+                <path d='M 0 0 C 100 0, 100 100, 100 100 L 100 100 L 100 0 Z' />
+              </svg>
+            </div>
+            <div className='container'>
+              <Routes>
+                {renderRoute('/auth/sign-in', SignIn)}
+                {renderRoute('/auth/sign-up', SignUp)}
+                <Route path='/' element={<Navigate to='/auth/sign-in' />} />
+                <Route path='/auth*' element={<Navigate to='/auth/sign-in' />} />
+              </Routes>              
             </div>
           </div>
-        </div>
-    </div>
+      </div>
+    </Router>
   );
 }
 

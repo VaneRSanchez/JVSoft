@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFont, faSave } from '@fortawesome/free-solid-svg-icons';
 import { applyInputEffects } from '../../assets/js/script';
 
-const Edit = ({ myData, btnSubmit, handleSubmit, handleInputChange }) => {
-    const [isChecked, setIsChecked] = useState(myData.status);
+const Edit = ({ data, btnSubmit, handleSubmit, handleInputChange }) => {
+    const [isChecked, setIsChecked] = useState(data.status);
 
     const handleToggle = () => {
         const newStatus = !isChecked;
@@ -22,7 +22,7 @@ const Edit = ({ myData, btnSubmit, handleSubmit, handleInputChange }) => {
                 <div className='input'>
                     <label htmlFor='name'>Nombre</label>
                     <FontAwesomeIcon icon={faFont} />
-                    <input type='text' id='name' name='name' value={myData.name || ''} onChange={handleInputChange} />
+                    <input type='text' id='name' name='name' value={data.name || ''} onChange={handleInputChange} />
                 </div>
                 <div className='bar'></div>
             </div>

@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBurger, faCarrot, faDiagramProject, faList, faRuler, faTimesCircle, faUserLock } from '@fortawesome/free-solid-svg-icons'
-import ProductCategories from '../components/product_categories/ProductCategories'
-import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
+import { faBacon, faBoxesStacked, faBurger, faCarrot, faDiagramProject, faList, faRuler, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import logo from '../assets/images/logo3.png';
 import Alert from '../components/Alert';
-import Units from '../components/units/Units';
+import InventoryRawMaterials from '../components/inventory_raw_materials/InventoryRawMaterials';
 import MovementTypes from '../components/movement_types/MovementTypes';
 import Products from '../components/products/Products';
+import ProductCategories from '../components/product_categories/ProductCategories'
+import ProductsMaterials from '../components/products_materials/ProductsMaterials'
+import RawMaterials from '../components/raw_materials/RawMaterials';
+import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
+import Units from '../components/units/Units';
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -49,6 +52,17 @@ function AppController() {
     setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id));
   };
 
+  const commonProps = {
+    newModal,
+    removeModal,
+    newAlert,
+    removeAlert
+  };
+  
+  const renderRoute = (path, Component) => (
+    <Route path={path} element={<Component {...commonProps} />} />
+  );
+
   return (
     <Router>
       <div className='app'>
@@ -66,21 +80,28 @@ function AppController() {
         {modals.map(modal => modal.app)}
         <nav className={menuActive ? 'menu active' : 'menu'}>
           <ul>
-            <li className='separation'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
+            <li className='separation'><span><FontAwesomeIcon icon={faWarehouse} /> Inventarios</span></li>
+            <li><Link to="/inventory/raw/materials"><FontAwesomeIcon icon={faBoxesStacked} /> Inventario materias primas</Link></li>
+            <li className='separation mt-8px'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
             <li><Link to="/movement/types"><FontAwesomeIcon icon={faDiagramProject} /> Tipos de movimiento</Link></li>
             <li><Link to="/products"><FontAwesomeIcon icon={faBurger} /> Productos</Link></li>
             <li><Link to="/product/categories"><FontAwesomeIcon icon={faList} /> Categorías de producto</Link></li>
-            <li><Link to="/raw/material/categories"><FontAwesomeIcon icon={faCarrot} /> Categorías de materias primas</Link></li>
+            <li><Link to="/products/materials"><FontAwesomeIcon icon={faBacon} /> Productos y materias</Link></li>
+            <li><Link to="/raw/materials"><FontAwesomeIcon icon={faCarrot} /> Materias primas</Link></li>
+            <li><Link to="/raw/material/categories"><FontAwesomeIcon icon={faList} /> Categorías de materias primas</Link></li>
             <li><Link to="/units"><FontAwesomeIcon icon={faRuler} /> Unidades</Link></li>
           </ul>
         </nav>
         <section className={menuActive ? 'content active' : 'content'}>
           <Routes>
-            <Route path="/movement/types" element={<MovementTypes newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
-            <Route path="/products" element={<Products newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
-            <Route path="/product/categories" element={<ProductCategories newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
-            <Route path="/raw/material/categories" element={<RawMaterialCategories newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
-            <Route path="/units" element={<Units newModal={newModal} removeModal={removeModal} newAlert={newAlert} removeAlert={removeAlert} />} />
+            {renderRoute('/inventory/raw/materials', InventoryRawMaterials)}
+            {renderRoute('/movement/types', MovementTypes)}
+            {renderRoute('/products', Products)}
+            {renderRoute('/product/categories', ProductCategories)}
+            {renderRoute('/products/materials', ProductsMaterials)}
+            {renderRoute('/raw/materials', RawMaterials)}
+            {renderRoute('/raw/material/categories', RawMaterialCategories)}
+            {renderRoute('/units', Units)}
           </Routes>
         </section>      
       </div>

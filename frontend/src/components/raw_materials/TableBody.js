@@ -8,23 +8,24 @@ import Edit from './Edit';
 const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAlert, reloadTable }) => {
     const handleEdit = (entry) => {
         newModal({
-            'id': `products-edit-${entry.id}-modal`,
+            'id': `raw-materials-edit-${entry.id}-modal`,
             'app':  
                 <Modal 
-                    key={`products-edit-${entry.id}-modal`} 
-                    id={`products-edit-${entry.id}-modal`} 
+                    key={`raw-materials-edit-${entry.id}-modal`} 
+                    id={`raw-materials-edit-${entry.id}-modal`} 
                     color={'warning'}
-                    title={'Editar producto'} 
+                    title={'Editar materia prima'} 
                     body={
                         <SendData
-                            endpoint={'/products'}
+                            endpoint={'/raw/materials'}
                             type={'PUT'}
                             data={{
                                 'id': entry.id,
                                 'name': entry.name,
                                 'description': entry.description,
                                 'price': entry.price,
-                                'product_categories_id': entry.product_categories.id,
+                                'raw_material_categories_id': entry.raw_material_categories.id,
+                                'units_id': entry.units.id,
                                 'status': entry.status,
                             }}
                             body={<Edit />}
@@ -69,7 +70,8 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                     <td>{entry.name}</td>
                     <td>{entry.description}</td>
                     <td><span className='badge'><FontAwesomeIcon icon={faDollarSign} /> {entry.price}</span></td>
-                    <td>{entry.product_categories.name}</td>
+                    <td>{entry.raw_material_categories.name}</td>
+                    <td>{entry.units.name}</td>
                     <td>{entry.status === false ? <span className='badge danger'><FontAwesomeIcon icon={faEyeSlash} /> Oculto</span> : <span className='badge'><FontAwesomeIcon icon={faEye} /> Visible</span>}</td>
                 </tr>
             ))}

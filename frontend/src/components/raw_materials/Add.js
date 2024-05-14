@@ -6,10 +6,15 @@ import axios from 'axios';
 import Alert from '../Alert';
 import { applyInputEffects } from '../../assets/js/script';
 import configData from '../../config.json';
+import Select from '../Select';
 
 const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
-    const [tableData, setTableData] = useState({
+    const [data, setData] = useState({
         name: null,
+        description: null,
+        price: null,
+        raw_material_categories_id: 0,
+        units_id: 0,
     });
     const [btnSubmit, setBtnSubmit] = useState(false);
 
@@ -19,7 +24,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setTableData({ ...tableData, [name]: value });
+        setData({ ...data, [name]: value });
     };
 
     const handleSubmit = async (event) => {
@@ -29,8 +34,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
         try {
             const authToken = localStorage.getItem('authToken');
-            const resp = await axios.post(`${configData.api_url}/product/categories`, tableData,
-            { 
+            const resp = await axios.post(`${configData.api_url}/raw/materials`, data, { 
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -84,10 +88,28 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
                 <div className='input'>
                     <label htmlFor='name'>Nombre</label>
                     <FontAwesomeIcon icon={faFont} />
-                    <input type='text' id='name' name='name' value={tableData.name || ''} onChange={handleInputChange} />
+                    <input type='text' id='name' name='name' value={data.name || ''} onChange={handleInputChange} />
                 </div>
                 <div className='bar'></div>
             </div>
+            <div className='input-group mt-6px'>                
+                <div className='input'>
+                    <label htmlFor='description'>Descripcion</label>
+                    <FontAwesomeIcon icon={faFont} />
+                    <input type='text' id='description' name='description' value={data.description || ''} onChange={handleInputChange} />
+                </div>
+                <div className='bar'></div>
+            </div>
+            <div className='input-group mt-6px'>                
+                <div className='input'>
+                    <label htmlFor='price'>Precio</label>
+                    <FontAwesomeIcon icon={faFont} />
+                    <input type='text' id='price' name='price' value={data.price || ''} onChange={handleInputChange} />
+                </div>
+                <div className='bar'></div>
+            </div>
+            <Select name={'raw_material_categories_id'} endpoint={'/raw/material/categories'} data={data} handleInputChange={handleInputChange} />
+            <Select name={'units_id'} endpoint={'/units'} data={data} handleInputChange={handleInputChange} />
             <button type='submit' className='btn btn-sm btn-primary mt-10px' disabled={btnSubmit}><FontAwesomeIcon icon={faAdd} /> Agregar</button>
         </form>
     );

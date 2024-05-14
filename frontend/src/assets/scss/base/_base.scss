@@ -304,6 +304,23 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
                 background: v.$color-warning-disabled;
             }
         }
+
+        &-danger {
+            border: v.$color-danger solid 2px;
+            background: v.$color-danger;
+            color: v.$color-white;
+
+            &:hover {
+                border: v.$color-danger-hover solid 2px;
+                background-color: v.$color-danger-hover;
+            }
+
+            &:disabled {
+                cursor: default;
+                border: v.$color-danger-disabled solid 2px;
+                background: v.$color-danger-disabled;
+            }
+        }
     }
 }
 
@@ -513,6 +530,43 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
         }
     }
 
+    &:hover, &.selected {
+        color: v.$color-primary;
+
+        .select {
+            border-bottom: 2px solid v.$color-primary;
+        }
+
+        &.select-warning {
+            color: v.$color-warning;
+
+            .select {
+                border-bottom: 2px solid v.$color-warning;
+            }
+        }
+    }
+
+    &.select-warning {
+        &:hover, &.selected, &.active {
+            color: v.$color-warning;
+
+            .select {
+                border-bottom: 2px solid v.$color-warning;
+            }
+        }
+
+        .select-menu {   
+            ul {    
+                li {    
+                    &:hover {
+                        background: v.$color-warning;
+                        color: v.$color-white;
+                    }                
+                }
+            }
+        }
+    }
+
     .input {
         display: none;
     }
@@ -577,7 +631,7 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
                 &:hover {
                     background: v.$color-primary;
                     color: v.$color-white;
-                }
+                }                
             }
         }
     }

@@ -6,10 +6,14 @@ import axios from 'axios';
 import Alert from '../Alert';
 import { applyInputEffects } from '../../assets/js/script';
 import configData from '../../config.json';
+import Select from '../Select';
 
 const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
-    const [tableData, setTableData] = useState({
-        name: null,
+    const [data, setData] = useState({
+        quantity: 0,
+        date_exp: null,
+        raw_materials_id: 0,
+        movement_types_id: 0,
     });
     const [btnSubmit, setBtnSubmit] = useState(false);
 
@@ -19,7 +23,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setTableData({ ...tableData, [name]: value });
+        setData({ ...data, [name]: value });
     };
 
     const handleSubmit = async (event) => {
@@ -29,7 +33,7 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
         try {
             const authToken = localStorage.getItem('authToken');
-            const resp = await axios.post(`${configData.api_url}/product/categories`, tableData,
+            const resp = await axios.post(`${configData.api_url}/inventory/raw/materials`, data, 
             { 
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -80,14 +84,24 @@ const Add = ({ newAlert, removeAlert, handleClose, reloadTable }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className='input-group'>                
+            <Select name={'raw_materials_id'} endpoint={'/raw/materials'} data={data} handleInputChange={handleInputChange} />
+            <div className='input-group mt-6px'>                
                 <div className='input'>
-                    <label htmlFor='name'>Nombre</label>
+                    <label htmlFor='quantity'>Cantidad</label>
                     <FontAwesomeIcon icon={faFont} />
-                    <input type='text' id='name' name='name' value={tableData.name || ''} onChange={handleInputChange} />
+                    <input type='text' id='quantity' name='quantity' value={data.quantity || ''} onChange={handleInputChange} />
                 </div>
                 <div className='bar'></div>
             </div>
+            <div className='input-group'>                
+                <div className='input'>
+                    <label htmlFor='date_exp'>Fecha de expiracion</label>
+                    <FontAwesomeIcon icon={faFont} />
+                    <input type='datetime-local' id='date_exp' name='date_exp' value={data.date_exp || ''} onChange={handleInputChange} />
+                </div>
+                <div className='bar'></div>
+            </div>
+            <Select name={'movement_types_id'} endpoint={'/movement/types'} data={data} handleInputChange={handleInputChange} />
             <button type='submit' className='btn btn-sm btn-primary mt-10px' disabled={btnSubmit}><FontAwesomeIcon icon={faAdd} /> Agregar</button>
         </form>
     );

@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthController from './controllers/AuthController';
 import AppController from './controllers/AppController';
 
 function App() {
-  const [ authToken ] = useState(true);
+  const [ auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    
+    if (authToken) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+  }, []);
 
   return (
     (
-      authToken ? 
+      auth ? 
         <AppController />
       :
-        <AuthController />
+        <AuthController setAuth={setAuth} />
     )
   );
 }

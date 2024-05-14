@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd, faEdit, faList } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faEdit, faRuler } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal';
 import Add from './Add';
 import Table from '../Table';
 import TableBody from './TableBody';
+import { Requests } from '../../assets/js/Requests';
 
 const Units = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const [forceTableUpdate, setForceTableUpdate] = useState(false);
@@ -16,6 +17,11 @@ const Units = ({ newModal, removeModal, newAlert, removeAlert }) => {
             <FontAwesomeIcon icon={faEdit} /> Editar
         </button>
     );
+    const [dataStatistics, setDataStatistics] = useState({
+        count_total: 0,
+        count_active: 0,
+        count_hidden: 0
+    });
 
     const columnsTable = {
         'id': 'ID',
@@ -25,6 +31,19 @@ const Units = ({ newModal, removeModal, newAlert, removeAlert }) => {
     const reloadTable = () => {
         setForceTableUpdate(prevState => !prevState);
     };   
+
+    useEffect(() => {
+        const setStatistics = async () => {
+            const response = await Requests({ endpoint: '/units', method: 'GET', data: {query: 'statistics'} });
+            if (response.data) {
+                setDataStatistics({
+                    count_total: response.data.count_total
+                });
+            }
+        };
+
+        setStatistics();
+    }, [forceTableUpdate]);
 
     return (
         <div>
@@ -42,36 +61,12 @@ const Units = ({ newModal, removeModal, newAlert, removeAlert }) => {
                         <div className='bar'></div>
                         <div className='info'>
                             <div className='icon'>
-                                <FontAwesomeIcon icon={faList} />
+                                <FontAwesomeIcon icon={faRuler} />
                             </div>
                         </div>
                         <div className='data'>
-                            <h2>0</h2>
-                            <span>Usuarios</span>
-                        </div>
-                    </div>
-                    <div className='info-panel dark'>
-                        <div className='bar'></div>
-                        <div className='info'>
-                            <div className='icon'>
-                                <FontAwesomeIcon icon={faList} />
-                            </div>
-                        </div>
-                        <div className='data'>
-                            <h2>0</h2>
-                            <span>Usuarios</span>
-                        </div>
-                    </div>
-                    <div className='info-panel danger'>
-                        <div className='bar'></div>
-                        <div className='info'>
-                            <div className='icon'>
-                                <FontAwesomeIcon icon={faList} />
-                            </div>
-                        </div>
-                        <div className='data'>
-                            <h2>0</h2>
-                            <span>Usuarios</span>
+                            <h2>{dataStatistics.count_total}</h2>
+                            <span>Total</span>
                         </div>
                     </div>
                 </div>

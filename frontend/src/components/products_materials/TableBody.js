@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDollarSign, faEdit, faEye, faEyeSlash, faFingerprint } from '@fortawesome/free-solid-svg-icons'
+import { faBurger, faEdit, faFingerprint } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal';
 import SendData from '../SendData';
 import Edit from './Edit';
@@ -8,24 +8,22 @@ import Edit from './Edit';
 const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAlert, reloadTable }) => {
     const handleEdit = (entry) => {
         newModal({
-            'id': `products-edit-${entry.id}-modal`,
+            'id': `products-materials-edit-${entry.id}-modal`,
             'app':  
                 <Modal 
-                    key={`products-edit-${entry.id}-modal`} 
-                    id={`products-edit-${entry.id}-modal`} 
+                    key={`products-materials-edit-${entry.id}-modal`} 
+                    id={`products-materials-edit-${entry.id}-modal`} 
                     color={'warning'}
-                    title={'Editar producto'} 
+                    title={'Editar producto y su materia'} 
                     body={
                         <SendData
-                            endpoint={'/products'}
+                            endpoint={'/products/materials'}
                             type={'PUT'}
                             data={{
                                 'id': entry.id,
-                                'name': entry.name,
-                                'description': entry.description,
-                                'price': entry.price,
-                                'product_categories_id': entry.product_categories.id,
-                                'status': entry.status,
+                                'quantity': entry.quantity,
+                                'products_id': entry.products.id,
+                                'raw_materials_id': entry.raw_materials.id
                             }}
                             body={<Edit />}
                             newAlert={newAlert} 
@@ -66,11 +64,9 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                     onClick={() => handleClick(entry)}
                 >
                     <td><span className='badge'><FontAwesomeIcon icon={faFingerprint} /> {entry.id}</span></td>
-                    <td>{entry.name}</td>
-                    <td>{entry.description}</td>
-                    <td><span className='badge'><FontAwesomeIcon icon={faDollarSign} /> {entry.price}</span></td>
-                    <td>{entry.product_categories.name}</td>
-                    <td>{entry.status === false ? <span className='badge danger'><FontAwesomeIcon icon={faEyeSlash} /> Oculto</span> : <span className='badge'><FontAwesomeIcon icon={faEye} /> Visible</span>}</td>
+                    <td>{entry.quantity}</td>
+                    <td><span className='badge'><FontAwesomeIcon icon={faBurger} /> {entry.products.name}</span></td>
+                    <td>{entry.raw_materials.name}</td>
                 </tr>
             ))}
         </tbody>
