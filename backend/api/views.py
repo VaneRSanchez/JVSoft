@@ -88,8 +88,24 @@ class ProductCategoriesAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': product_categories_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+            count_total = jv_models.ProductCategoriesModel.objects.filter(
+            ).count()
+
+            count_active = jv_models.ProductCategoriesModel.objects.filter(
+                status = 1
+            ).count()
+
+            count_hidden = jv_models.ProductCategoriesModel.objects.filter(
+                status = 0
+            ).count()
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+                'count_active': count_active,
+                'count_hidden': count_hidden,
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
@@ -153,8 +169,24 @@ class RawMaterialCategoriesAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': raw_material_categories_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+            count_total = jv_models.RawMaterialCategoriesModel.objects.filter(
+            ).count()
+
+            count_active = jv_models.RawMaterialCategoriesModel.objects.filter(
+                status = 1
+            ).count()
+
+            count_hidden = jv_models.RawMaterialCategoriesModel.objects.filter(
+                status = 0
+            ).count()
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+                'count_active': count_active,
+                'count_hidden': count_hidden,
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
@@ -217,8 +249,14 @@ class UnitsAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': units_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+            count_total= jv_models.UnitsModel.objects.filter(
+            ).count()
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
@@ -281,10 +319,18 @@ class MovementTypesAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': movement_types_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+
+            count_total = jv_models.MovementTypesModel.objects.filter(
+            ).count()
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+            })
+        
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
-    
+        
     def post(self, request):
         serializer = jv_serializers.MovementTypesAddSerializer(data = request.data)
         if not serializer.is_valid():
@@ -416,8 +462,27 @@ class ProductsAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': products_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+
+            count_total = jv_models.ProductsModel.objects.filter(
+            ).count()
+
+            count_active = jv_models.ProductsModel.objects.filter(
+                status = 1
+            ).count()
+
+            count_hidden = jv_models.ProductsModel.objects.filter(
+                status = 0
+            ).count()
+
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+                'count_active': count_active,
+                'count_hidden': count_hidden,
+            })
+        
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
@@ -483,8 +548,24 @@ class RawMaterialsAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': raw_materials_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+            count_total = jv_models.RawMaterialsModel.objects.filter(
+            ).count()
+
+            count_active = jv_models.RawMaterialsModel.objects.filter(
+                status = 1
+            ).count()
+
+            count_hidden = jv_models.RawMaterialsModel.objects.filter(
+                status = 0
+            ).count()
+
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+                'count_active': count_active,
+                'count_hidden': count_hidden,
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
     
     def post(self, request):
@@ -639,7 +720,6 @@ class InventoryRawMaterialsAPIView(APIView):
 
         serializer.save()
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
-    
 
 class ProductsMaterialsAPIView(APIView):
     permission_classes = [IsAuthenticated]
