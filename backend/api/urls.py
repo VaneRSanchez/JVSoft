@@ -13,5 +13,5 @@ urlpatterns = [
     path('movement/types', jv_views.MovementTypesAPIView.as_view(), name='api-movement-types'),
     path('sales', jv_views.SalesAPIView.as_view(), name='api-sales'),
     path('detail/sales', jv_views.SalesAPIView.as_view(), name='api-detail-sales'),
-    
+    path('sale/finalize', jv_views.SalesFinalizeAPIView.as_view(), name='sale-finalize'),
 ]

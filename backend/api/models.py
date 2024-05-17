@@ -35,6 +35,8 @@ class MovementTypesModel(models.Model):
 class SalesModel(models.Model):
     id = models.AutoField(primary_key = True)
     total = models.FloatField(default = 0)
+    date_reg = models.DateTimeField(default = timezone.now, null = False, blank = False)
+    users = models.ForeignKey(User, on_delete = models.RESTRICT)
     
     class Meta: 
         db_table = 'sales'
@@ -42,7 +44,7 @@ class SalesModel(models.Model):
 class ProductsModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20, null = False, blank = False) 
-    description = models.CharField(max_length = 20, null = False, blank = False) 
+    description = models.CharField(max_length = 150, null = False, blank = False) 
     price = models.FloatField(default = 0)
     status = models.BooleanField(default = False, null = False, blank = False)
     product_categories = models.ForeignKey(ProductCategoriesModel, on_delete = models.RESTRICT)
@@ -76,7 +78,7 @@ class InventoryRawMaterialsModel(models.Model):
 
 class ProductsMaterialsModel(models.Model):
     id = models.AutoField(primary_key = True)
-    quantity = models.IntegerField(default = 0, null = False, blank = False)
+    quantity = models.FloatField(default = 0, null = False, blank = False)
     products = models.ForeignKey(ProductsModel, on_delete = models.RESTRICT)
     raw_materials = models.ForeignKey(RawMaterialsModel, on_delete = models.RESTRICT)
 
@@ -86,10 +88,8 @@ class ProductsMaterialsModel(models.Model):
 class DetailSalesModel(models.Model):
     id = models.AutoField(primary_key = True)
     price = models.FloatField(default = 0)
-    date_reg = models.DateTimeField(null = False, blank = False)
+    quantity = models.FloatField(default = 0)
     products = models.ForeignKey(ProductsModel, on_delete = models.RESTRICT)
     sales = models.ForeignKey(SalesModel, on_delete = models.RESTRICT)
-    users = models.ForeignKey(User, on_delete = models.RESTRICT)
-
     class Meta: 
         db_table = 'detail_sales'

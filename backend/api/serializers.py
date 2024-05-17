@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 import api.models as jv_models
 from django.db import IntegrityError
 from django.db.models import Sum
+from django.contrib.auth.models import User
 
 #Productos categorias
 class ProductCategoriesTableSerializer(serializers.ModelSerializer):
@@ -219,7 +220,7 @@ class ProductsAddSerializer(serializers.ModelSerializer):
         'required': 'La descripción es requerida. Por favor, proporciona una descripción valido.',
         'blank': 'La descripción no puede estar en blanco. Por favor, proporciona una descripción valido.',
         'null': 'La descripción no puede estar en blanco. Por favor, proporciona una descripción valido.',
-        'max_length': 'La descripción no puede pasar de los 20 caracteres. Por favor, proporciona una descripción valida.',
+        'max_length': 'La descripción no puede pasar de los 150 caracteres. Por favor, proporciona una descripción valida.',
     }, max_length = 150)
 
     price = serializers.FloatField(error_messages= {
@@ -270,8 +271,8 @@ class ProductsEditSerializer(serializers.ModelSerializer):
         'required': 'La descripción es requerida. Por favor, proporciona una descripción valido.',
         'blank': 'La descripción no puede estar en blanco. Por favor, proporciona una descripción valido.',
         'null': 'La descripción no puede estar en blanco. Por favor, proporciona una descripción valido.',
-        'max_length': 'La descripción no puede pasar de los 20 caracteres. Por favor, proporciona una descripción valida.',
-    }, max_length = 20)
+        'max_length': 'La descripción no puede pasar de los 150 caracteres. Por favor, proporciona una descripción valida.',
+    }, max_length = 150)
 
     price = serializers.FloatField(error_messages= {
         'required': 'El precio es requerido. Por favor, proporciona un precio valido.',
@@ -594,16 +595,18 @@ class InventoryRawMaterialsEditSerializer(serializers.ModelSerializer):
         
 #ProductsMaterials
 class ProductsMaterialsTableSerializer(serializers.ModelSerializer):
+    products = ProductsTableSerializer()
+    raw_materials = RawMaterialsTableSerializer()
     class Meta:
         model = jv_models.ProductsMaterialsModel
-        fields = ['id','quantity']
+        fields = ['id','quantity','products','raw_materials']
 
 class ProductsMaterialsAddSerializer(serializers.ModelSerializer):
-    quantity = serializers.IntegerField(error_messages= {
+    quantity = serializers.FloatField(error_messages= {
         'required': 'La cantidad es requerida. Por favor, proporciona una cantidad valido.',
         'blank': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
         'null': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
-        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
+        'invalid': 'La cantidad es invalida. Por favor, proporciona una cantidad valida.',
     })
 
     products_id = serializers.IntegerField(error_messages= {
@@ -645,7 +648,7 @@ class ProductsMaterialsEditSerializer(serializers.ModelSerializer):
         'invalid': 'La materia prima es invalida. Por favor, proporciona una materia prima valida.',
     })
 
-    product_id = serializers.IntegerField(error_messages= {
+    products_id = serializers.IntegerField(error_messages= {
         'required': 'El producto es requerido. Por favor, proporciona un producto valido.',
         'blank': 'El producto no puede estar en blanco. Por favor, proporciona un producto valido.',
         'null': 'El productono puede estar en blanco. Por favor, proporciona un producto valido.',
@@ -653,7 +656,7 @@ class ProductsMaterialsEditSerializer(serializers.ModelSerializer):
     })
     class Meta:
         model = jv_models.ProductsMaterialsModel
-        fields = ['id', 'quantity', 'data_exp', 'raw_materials_id', 'product_id']
+        fields = ['id', 'quantity','raw_materials_id', 'products_id']
 
 #DetailSales
 class DetailSalesTableSerializer(serializers.ModelSerializer):
@@ -747,3 +750,24 @@ class DetailSalesEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = jv_models.DetailSalesModel
         fields = ['id', 'price', 'data_reg', 'sales_id', 'product_id', 'users_id']
+
+#SalesFinalize
+class SalesFinalizeAddSerializer(serializers.ModelSerializer):
+    total = serializers.FloatField(error_messages= {
+        'required': 'El total es requerido. Por favor, proporciona un nombre valido.',
+        'blank': 'El total no puede estar en blanco. Por favor, proporciona un nombre valido.',
+        'null': 'El total no puede estar en blanco. Por favor, proporciona un nombre valido.',
+        'max_length': 'El total no puede pasar de los 20 caracteres. Por favor, proporciona un nombre valido.',
+    })
+
+
+    users_id = serializers.IntegerField(error_messages= {
+        'required': 'El usuario es requerido. Por favor, proporciona un usuario valido.',
+        'blank': 'El usuariono puede estar en blanco. Por favor, proporciona un usuario valido.',
+        'null': 'El usuario no puede estar en blanco. Por favor, proporciona un usuario valido.',
+        'invalid': 'El usuario es invalido. Por favor, proporciona un usuario valido.',
+    })
+
+    class Meta:
+        model = jv_models.SalesModel
+        fields = ['total', 'users_id']

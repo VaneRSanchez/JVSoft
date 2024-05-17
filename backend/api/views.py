@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from django.core.paginator import Paginator
@@ -16,6 +17,7 @@ from django.db.models import Q, Sum, F, Case, When, IntegerField
 import api.serializers as jv_serializers
 import api.models as jv_models
 import datetime
+
 
 class SignInAPIView(APIView):
     permission_classes = [AllowAny]
@@ -763,9 +765,15 @@ class ProductsMaterialsAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': products_materials_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'statistics':
+            count_total = jv_models.ProductsMaterialsModel.objects.filter(
+            ).count()
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
+    
     
     def post(self, request):
         serializer = jv_serializers.ProductsMaterialsAddSerializer(data = request.data)
@@ -850,3 +858,85 @@ class DetailSalesAPIView(APIView):
 
         serializer.save()
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
+
+
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+  
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk = pk)
+        except User.DoesNotExist:
+            raise JsonResponse({'success': False, 'msg': 'El usuario  no existe.'}, status = 404)
+
+    def get(self, request):
+        query = request.query_params.get('query', '')
+        if query == 'table':
+            search_query = request.query_params.get('search', '')
+            page_number = request.query_params.get('page', 1)
+            order_by = request.query_params.get('order_by', 'id')
+            order = request.query_params.get('order', 'asc')
+            show = request.query_params.get('show', 10)
+            
+            if order_by == 'actions':
+                order_by = 'id'
+
+            user = User.objects.filter(
+                Q(id__icontains = search_query) |
+                Q(username__icontains = search_query)|
+                Q(password__icontains = search_query)|
+                Q(first_name__icontains = search_query)|
+                Q(last_name__icontains = search_query)
+            )
+
+            if order == 'desc':
+                order_by = f'-{order_by}'
+
+            user = user.order_by(order_by)
+            paginator = Paginator(user, show)
+            user_page = paginator.page(page_number)
+
+            serialized = jv_serializers.UsersTableSerializer(user_page, many = True)
+
+            return JsonResponse({
+                'success': True,
+                'data': serialized.data,
+                'total_pages': paginator.num_pages,
+                'current_page': user_page.number
+            })
+        elif query == 'info':
+            pass
+        return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
+    
+    def post(self, request):
+        serializer = jv_serializers.UsersAddSerializer(data = request.data)
+        if not serializer.is_valid():
+            return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
+        
+        serializer.save()
+        return JsonResponse({'success': True, 'msg': 'Se agregó correctamente.'}, status = 201)
+    
+    def put(self, request):
+        id = request.data.get('id') 
+        instance = self.get_object(id)
+        serializer = jv_serializers.UsersEditSerializer(instance, data = request.data)
+        if not serializer.is_valid():
+            return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
+
+        serializer.save()
+        return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
+
+
+class SalesFinalizeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request):
+        request.data['total'] = 0
+        request.data['users_id'] = request.user
+
+        serializer = jv_serializers.SalesFinalizeAddSerializer(data = request.data)
+        if not serializer.is_valid():
+            return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
+        serializer.save()
+        return JsonResponse({'success': True, 'msg': 'Se finalizó correctamente.'}, status = 200)
