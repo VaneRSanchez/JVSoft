@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBacon, faBoxesStacked, faBurger, faCarrot, faDiagramProject, faList, faRuler, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTimesCircle, faUserLock, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import logo from '../assets/images/logo3.png';
 import Alert from '../components/Alert';
 import InventoryRawMaterials from '../components/inventory_raw_materials/InventoryRawMaterials';
@@ -13,6 +13,8 @@ import ProductsMaterials from '../components/products_materials/ProductsMaterial
 import RawMaterials from '../components/raw_materials/RawMaterials';
 import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
 import Units from '../components/units/Units';
+import AppPos from '../components/pos/AppPos';
+
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -80,6 +82,8 @@ function AppController() {
         {modals.map(modal => modal.app)}
         <nav className={menuActive ? 'menu active' : 'menu'}>
           <ul>
+            <li className='separation'><span><FontAwesomeIcon icon={faRocket} /> App</span></li>
+            <li><Link to="/app/pos"><FontAwesomeIcon icon={faCrosshairs} /> Punto de venta</Link></li>
             <li className='separation'><span><FontAwesomeIcon icon={faWarehouse} /> Inventarios</span></li>
             <li><Link to="/inventory/raw/materials"><FontAwesomeIcon icon={faBoxesStacked} /> Inventario materias primas</Link></li>
             <li className='separation mt-8px'><span><FontAwesomeIcon icon={faUserLock} /> Administracion</span></li>
@@ -94,6 +98,7 @@ function AppController() {
         </nav>
         <section className={menuActive ? 'content active' : 'content'}>
           <Routes>
+            {renderRoute('/app/pos', AppPos)}
             {renderRoute('/inventory/raw/materials', InventoryRawMaterials)}
             {renderRoute('/movement/types', MovementTypes)}
             {renderRoute('/products', Products)}

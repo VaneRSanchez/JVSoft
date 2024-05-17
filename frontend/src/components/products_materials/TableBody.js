@@ -64,7 +64,7 @@ const TableBody = ({ data, setBtnEdit, newModal, removeModal, newAlert, removeAl
                     onClick={() => handleClick(entry)}
                 >
                     <td><span className='badge'><FontAwesomeIcon icon={faFingerprint} /> {entry.id}</span></td>
-                    <td>{entry.quantity}</td>
+                    <td>{entry.quantity} ({entry.raw_materials.units.name})</td>
                     <td><span className='badge'><FontAwesomeIcon icon={faBurger} /> {entry.products.name}</span></td>
                     <td>{entry.raw_materials.name}</td>
                 </tr>

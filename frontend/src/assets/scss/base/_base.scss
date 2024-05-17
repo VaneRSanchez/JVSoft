@@ -653,6 +653,14 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
 
 .row {
     display: flex;
+
+    &.column {
+        flex-direction: column;
+    }
+}
+
+.align-items-center {
+    align-items: center;
 }
 
 .align-content-start {
@@ -686,6 +694,12 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
 }
 
 @for $i from 1 through 20 {
+    .p-#{$i}px{
+        padding: #{$i}px !important;
+    }
+}
+
+@for $i from 1 through 20 {
     .pt-#{$i}px{
         padding-top: #{$i}px !important;
     }
@@ -694,6 +708,12 @@ $auth-input-font-size: v.$input-font-size + 0.2rem;
 @for $i from 1 through 20 {
     .pb-#{$i}px{
         padding-bottom: #{$i}px !important;
+    }
+}
+
+@for $i from 1 through 20 {
+    .pr-#{$i}px{
+        padding-right: #{$i}px !important;
     }
 }
 
