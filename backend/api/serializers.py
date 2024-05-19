@@ -672,13 +672,6 @@ class DetailSalesAddSerializer(serializers.ModelSerializer):
         'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
     })
 
-    data_reg = serializers.DateTimeField(error_messages= {
-        'required': 'La fecha de registro es requerida. Por favor, proporciona una fecha de registro valida.',
-        'blank': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'null': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'invalid': 'La fecha de registro es invalida. Por favor, proporciona un precio valida.',
-    })
-
     products_id = serializers.IntegerField(error_messages= {
         'required': 'El producto es requerido. Por favor, proporciona un producto valido.',
         'blank': 'El producto no puede estar en blanco. Por favor, proporciona un producto valido.',
@@ -693,63 +686,16 @@ class DetailSalesAddSerializer(serializers.ModelSerializer):
         'invalid': 'La venta es invalida. Por favor, proporciona una venta valida.',
     })
 
-    users_id = serializers.IntegerField(error_messages= {
-        'required': 'El usuario es requerido. Por favor, proporciona un usuario valido.',
-        'blank': 'El usuariono puede estar en blanco. Por favor, proporciona un usuario valido.',
-        'null': 'El usuario no puede estar en blanco. Por favor, proporciona un usuario valido.',
-        'invalid': 'El usuario es invalido. Por favor, proporciona un usuario valido.',
+    quantity = serializers.FloatField(error_messages= {
+        'required': 'La cantidad es requerida. Por favor, proporciona una cantidad valido.',
+        'blank': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
+        'null': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
+        'invalid': 'La cantidad es invalida. Por favor, proporciona una cantidad valida.',
     })
 
     class Meta:
         model = jv_models.DetailSalesModel
-        fields = ['id', 'price', 'users_id', 'products_id', 'sales_id']
-
-class DetailSalesEditSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(error_messages={
-        'required': 'El numero de la categoria es requerido. Por favor, proporciona un numero valido.',
-        'blank': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
-        'null': 'El numero de la categoria no puede estar en blanco. Por favor, proporciona un numero valido.',
-        'invalid': 'El numero de la categoria es invalido. Por favor, proporciona un numero de la categoria valido.',
-
-    })
-
-    price = serializers.FloatField(error_messages= {
-        'required': 'El precio es requerido. Por favor, proporciona un precio valido.',
-        'blank': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
-        'null': 'El precio no puede estar en blanco. Por favor, proporciona un precio valido.',
-        'invalid': 'El precio es invalido. Por favor, proporciona un precio valido.',
-    })
-
-    data_reg = serializers.DateTimeField(error_messages= {
-        'required': 'La fecha de registro es requerida. Por favor, proporciona una fecha de registro valida.',
-        'blank': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'null': 'La fecha de registro no puede estar en blanco. Por favor, proporciona una fecha de registro valida.',
-        'invalid': 'La fecha de registro es invalida. Por favor, proporciona una fecha de registro valida.',
-    })
-
-    product_id = serializers.IntegerField(error_messages= {
-        'required': 'El producto es requerido. Por favor, proporciona un producto valido.',
-        'blank': 'El producto no puede estar en blanco. Por favor, proporciona un producto valido.',
-        'null': 'El productono puede estar en blanco. Por favor, proporciona un producto valido.',
-        'invalid': 'El productoes invalido. Por favor, proporciona un producto valido.',
-    })
-
-    sales_id = serializers.IntegerField(error_messages= {
-        'required': 'La venta es requerida. Por favor, proporciona una venta valida.',
-        'blank': 'La venta no puede estar en blanco. Por favor, proporciona una venta valida.',
-        'null': 'La venta no puede estar en blanco. Por favor, proporciona una venta valida.',
-        'invalid': 'La venta es invalida. Por favor, proporciona una venta valida.',
-    })
-
-    users_id = serializers.IntegerField(error_messages= {
-        'required': 'El usuario es requerido. Por favor, proporciona un usuario valido.',
-        'blank': 'El usuariono puede estar en blanco. Por favor, proporciona un usuario valido.',
-        'null': 'El usuario no puede estar en blanco. Por favor, proporciona un usuario valido.',
-        'invalid': 'El usuario es invalido. Por favor, proporciona un usuario valido.',
-    })
-    class Meta:
-        model = jv_models.DetailSalesModel
-        fields = ['id', 'price', 'data_reg', 'sales_id', 'product_id', 'users_id']
+        fields = ['price', 'products_id', 'sales_id', 'quantity']
 
 #SalesFinalize
 class SalesFinalizeAddSerializer(serializers.ModelSerializer):
@@ -759,7 +705,6 @@ class SalesFinalizeAddSerializer(serializers.ModelSerializer):
         'null': 'El total no puede estar en blanco. Por favor, proporciona un nombre valido.',
         'max_length': 'El total no puede pasar de los 20 caracteres. Por favor, proporciona un nombre valido.',
     })
-
 
     users_id = serializers.IntegerField(error_messages= {
         'required': 'El usuario es requerido. Por favor, proporciona un usuario valido.',

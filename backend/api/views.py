@@ -6,13 +6,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
+from django.db import transaction
 from django.db.models import Q, Sum, F, Case, When, IntegerField
 import api.serializers as jv_serializers
 import api.models as jv_models
@@ -926,17 +927,57 @@ class DetailSalesAPIView(APIView):
         serializer.save()
         return JsonResponse({'success': True, 'msg': 'Se editó correctamente.'}, status = 200)
 
-
 class SalesFinalizeAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+    def get_product(self, pk):
+        try:
+            return jv_models.ProductsModel.objects.get(pk=pk)
+        except jv_models.ProductsModel.DoesNotExist:
+            raise Http404('El producto no existe.')
+        
     def post(self, request):
-        request.data['total'] = 0
-        request.data['users_id'] = request.user
+        with transaction.atomic():
+            request.data['total'] = 0
+            request.data['users_id'] = request.user.id
 
-        serializer = jv_serializers.SalesFinalizeAddSerializer(data = request.data)
-        if not serializer.is_valid():
-            return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
-        serializer.save()
-        return JsonResponse({'success': True, 'msg': 'Se finalizó correctamente.'}, status = 200)
+            serializer = jv_serializers.SalesFinalizeAddSerializer(data = request.data)
+            if not serializer.is_valid():
+                return JsonResponse({'success': False, 'msg': serializer.errors}, status = 400)
+            
+            sales_instance = serializer.save()
+            sales_id = sales_instance.id  
+            
+            cart = request.data['cart']
+            if not cart:
+                transaction.set_rollback(True)
+                return JsonResponse({'success': False, 'msg': 'Carrito vació'}, status = 400)
+            
+            sale_total = 0 
+            
+            for item in cart:
+                try:
+                    instance_product = self.get_product(item['id'])
+                except Http404 as e:
+                    return JsonResponse({'success': False, 'msg': str(e)}, status = 404)
+                
+                item_obj =  {
+                    'price': instance_product.price,
+                    'products_id': instance_product.id,
+                    'sales_id': sales_id,
+                    'quantity': item['quantity']
+                }
+                
+                sale_total += item['quantity'] * instance_product.price
+
+                serializer_details = jv_serializers.DetailSalesAddSerializer(data = item_obj)
+                if not serializer_details.is_valid():
+                    return JsonResponse({'success': False, 'msg': serializer_details.errors}, status = 400)
+                
+                serializer_details.save()
+
+            sales_instance.total = sale_total
+            sales_instance.save()
+
+            return JsonResponse({'success': True, 'msg': 'Se finalizó correctamente.'}, status = 200)
