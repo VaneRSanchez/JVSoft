@@ -390,9 +390,16 @@ class SalesAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': sales_page.number
             })
-        elif query == 'info':
-            pass
+        elif query == 'obj':
+            id = request.query_params.get('id', None)
+            instance = self.get_object(id)
+            serialized = jv_serializers.SalesTableSerializer(instance)
+            return JsonResponse({
+                'success': True,
+                'data': serialized.data,
+            })
         return JsonResponse({'success': False, 'msg': 'Consulta no encontrada.'}, status=404)
+    
     
     def post(self, request):
         serializer = jv_serializers.SalesAddSerializer(data = request.data)
@@ -976,4 +983,4 @@ class SalesFinalizeAPIView(APIView):
             sales_instance.total = sale_total
             sales_instance.save()
 
-            return JsonResponse({'success': True, 'msg': 'Se finalizó correctamente.'}, status = 200)
+            return JsonResponse({'success': True,'sale_id': sales_id, 'msg': 'Se finalizó correctamen.'}, status = 200)
