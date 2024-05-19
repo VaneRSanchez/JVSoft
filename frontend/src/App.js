@@ -10,10 +10,13 @@ function App() {
     const authToken = localStorage.getItem('authToken');
     
     if (authToken) {
-      setContent(<AppController />);
-    } else {
-      setContent(<AuthController setAuth={setAuth} />);
+      setAuth(true);
+      setContent(<AppController setAuth={setAuth} />);
+      return;
     }
+
+    setAuth(false);
+    setContent(<AuthController setAuth={setAuth} />);    
   }, [auth]);
 
   return content;

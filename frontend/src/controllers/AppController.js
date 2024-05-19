@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
@@ -15,8 +15,9 @@ import RawMaterialCategories from '../components/raw_material_categories/RawMate
 import Units from '../components/units/Units';
 import AppPos from '../components/pos/AppPos';
 import PDFTicket from '../components/pdf/PDFTicket';
+import AuthLogout from '../components/auth/AuthLogout';
 
-function AppController() {
+function AppController({ setAuth }) {
   const [menuActive, setMenuActive] = useState(false);
   const [modals, setModals] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -58,7 +59,8 @@ function AppController() {
     newModal,
     removeModal,
     newAlert,
-    removeAlert
+    removeAlert,
+    setAuth
   };
   
   const renderRoute = (path, Component) => (
@@ -98,6 +100,7 @@ function AppController() {
         </nav>
         <section className={menuActive ? 'content active' : 'content'}>
           <Routes>
+            {renderRoute('/auth/logout', AuthLogout)}
             {renderRoute('/app/pos', AppPos)}
             {renderRoute('/inventory/raw/materials', InventoryRawMaterials)}
             {renderRoute('/movement/types', MovementTypes)}
@@ -108,6 +111,7 @@ function AppController() {
             {renderRoute('/raw/material/categories', RawMaterialCategories)}
             {renderRoute('/units', Units)}
             {renderRoute('/pdf/sale', PDFTicket)}
+            <Route path='/*' element={<Navigate to='/app/pos' />} />
           </Routes>
         </section>      
       </div>

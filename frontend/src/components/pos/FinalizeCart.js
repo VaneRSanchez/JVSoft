@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faDollarSign, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +15,7 @@ const FinalizeCart = ({ cart, clearCart, newAlert, removeAlert, handleClose }) =
     });
     const [change, setChange] = useState(0);
     const [btnSubmit, setBtnSubmit] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         applyInputEffects();
@@ -60,8 +62,6 @@ const FinalizeCart = ({ cart, clearCart, newAlert, removeAlert, handleClose }) =
                 setBtnSubmit(true);
                 return false;
             }  
-            console.log(cart)
-            console.log(data)
 
             const authToken = localStorage.getItem('authToken');
             const resp = await axios.post(`${configData.api_url}/sale/finalize`, data, 
@@ -88,6 +88,7 @@ const FinalizeCart = ({ cart, clearCart, newAlert, removeAlert, handleClose }) =
             });
             
             setTimeout(function(){
+                navigate(`/pdf/sale?id=${resp_data.sale_id}`)
                 handleClose();                
             }, 1000); 
             clearCart();

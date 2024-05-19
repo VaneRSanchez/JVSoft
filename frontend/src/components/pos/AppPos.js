@@ -8,13 +8,11 @@ import EditCart from './EditCart';
 import FinalizeCart from './FinalizeCart';
 
 const AppPos = ({ newModal, removeModal, newAlert, removeAlert }) => {
-    const [forceTableUpdate, setForceTableUpdate] = useState(false);
-    
+    const [forceTableUpdate, setForceTableUpdate] = useState(false);    
     const cartSaved = localStorage.getItem('cart');
     const cartStart = cartSaved ? JSON.parse(cartSaved) : [];
-
     const [cart, setCart] = useState(cartStart);
-
+    
     const columnsTable = {
         'id': 'ID',
         'name': 'Nombre',

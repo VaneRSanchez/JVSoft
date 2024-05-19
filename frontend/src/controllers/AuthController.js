@@ -84,8 +84,7 @@ function AuthController({ setAuth }) {
               <Routes>
                 {renderRoute('/auth/sign-in', SignIn)}
                 {renderRoute('/auth/sign-up', SignUp)}
-                <Route path='/' element={<Navigate to='/auth/sign-in' />} />
-                <Route path='/auth*' element={<Navigate to='/auth/sign-in' />} />
+                <Route path='/*' element={<Navigate to='/auth/sign-in' />} />
               </Routes>              
             </div>
           </div>
