@@ -14,6 +14,7 @@ import RawMaterials from '../components/raw_materials/RawMaterials';
 import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
 import Units from '../components/units/Units';
 import AppPos from '../components/pos/AppPos';
+import PDFTicket from '../components/pdf/PDFTicket';
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
@@ -106,6 +107,7 @@ function AppController() {
             {renderRoute('/raw/materials', RawMaterials)}
             {renderRoute('/raw/material/categories', RawMaterialCategories)}
             {renderRoute('/units', Units)}
+            {renderRoute('/pdf/sale', PDFTicket)}
           </Routes>
         </section>      
       </div>
