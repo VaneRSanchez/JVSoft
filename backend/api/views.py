@@ -1,24 +1,20 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse, Http404
-from django.contrib.auth import authenticate, login, get_user_model
+from django.template.loader import get_template
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from django.core.paginator import Paginator
-from django.core.validators import validate_email
 from django.db import transaction
-from django.db.models import Q, Sum, F, Case, When, IntegerField
+from django.db.models import Q 
 import api.serializers as jv_serializers
 import api.models as jv_models
-import datetime
-
 
 class SignInAPIView(APIView):
     permission_classes = [AllowAny]
