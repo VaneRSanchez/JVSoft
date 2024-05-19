@@ -20,6 +20,12 @@ const FinalizeCart = ({ cart, clearCart, newAlert, removeAlert, handleClose }) =
     }, []);
 
     useEffect(() => {
+        setData({ ...data, cart: cart });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cart]);
+
+    useEffect(() => {
         const change = data.payment - calculateTotal();
         setChange(change);
         if(change < 0){
@@ -48,13 +54,15 @@ const FinalizeCart = ({ cart, clearCart, newAlert, removeAlert, handleClose }) =
         setBtnSubmit(true);
 
         try {
-            setData({ ...data, cart: cart });
             const change = data.payment - calculateTotal();
             setChange(change);
             if(change < 0){
                 setBtnSubmit(true);
                 return false;
             }  
+            console.log(cart)
+            console.log(data)
+
             const authToken = localStorage.getItem('authToken');
             const resp = await axios.post(`${configData.api_url}/sale/finalize`, data, 
             { 

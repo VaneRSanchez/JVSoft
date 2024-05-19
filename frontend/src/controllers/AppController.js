@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTimesCircle, faUserLock, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import logo from '../assets/images/logo3.png';
 import Alert from '../components/Alert';
 import InventoryRawMaterials from '../components/inventory_raw_materials/InventoryRawMaterials';
@@ -14,7 +14,6 @@ import RawMaterials from '../components/raw_materials/RawMaterials';
 import RawMaterialCategories from '../components/raw_material_categories/RawMaterialCategories'
 import Units from '../components/units/Units';
 import AppPos from '../components/pos/AppPos';
-
 
 function AppController() {
   const [menuActive, setMenuActive] = useState(false);
