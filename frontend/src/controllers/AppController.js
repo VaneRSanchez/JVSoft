@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBacon, faBoxesStacked, faBurger, faCarrot, faCrosshairs, faDiagramProject, faList, faRocket, faRuler, faTicket, faTimesCircle, faUserLock, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import logo from '../assets/images/logo3.png';
 import Alert from '../components/Alert';
 import InventoryRawMaterials from '../components/inventory_raw_materials/InventoryRawMaterials';
@@ -16,6 +16,7 @@ import Units from '../components/units/Units';
 import AppPos from '../components/pos/AppPos';
 import PDFTicket from '../components/pdf/PDFTicket';
 import AuthLogout from '../components/auth/AuthLogout';
+import Sales from '../components/sales/Sales';
 
 function AppController({ setAuth }) {
   const [menuActive, setMenuActive] = useState(false);
@@ -96,6 +97,8 @@ function AppController({ setAuth }) {
             <li><Link to="/raw/materials"><FontAwesomeIcon icon={faCarrot} /> Materias primas</Link></li>
             <li><Link to="/raw/material/categories"><FontAwesomeIcon icon={faList} /> Categorías de materias primas</Link></li>
             <li><Link to="/units"><FontAwesomeIcon icon={faRuler} /> Unidades</Link></li>
+            <li><Link to="/sales"><FontAwesomeIcon icon={faTicket} /> Ventas</Link></li>
+
           </ul>
         </nav>
         <section className={menuActive ? 'content active' : 'content'}>
@@ -110,6 +113,7 @@ function AppController({ setAuth }) {
             {renderRoute('/raw/materials', RawMaterials)}
             {renderRoute('/raw/material/categories', RawMaterialCategories)}
             {renderRoute('/units', Units)}
+            {renderRoute('/sales', Sales)}
             {renderRoute('/pdf/sale', PDFTicket)}
             <Route path='/*' element={<Navigate to='/app/pos' />} />
           </Routes>
