@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#diuqlde70!m=1bgk^^0490iqv&zhfn(*rrm7rfnf&xc*568(l
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.51',
+    '192.168.0.182',
     '192.168.0.103',
     'lfw8w794-8000.usw3.devtunnels.ms',
     'localhost',
@@ -68,7 +68,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days = 2),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=14),
     'SLIDING_TOKEN_LIFETIME': datetime.timedelta(days=14),

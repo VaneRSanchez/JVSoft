@@ -527,7 +527,7 @@ class InventoryFindRawMaterialsTableSerializer(serializers.ModelSerializer):
         return total_quantity
     
 class InventoryRawMaterialsAddSerializer(serializers.ModelSerializer):
-    quantity = serializers.IntegerField(error_messages= {
+    quantity = serializers.FloatField(error_messages= {
         'required': 'La cantidad es requerida. Por favor, proporciona una cantidad valido.',
         'blank': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',
         'null': 'La cantidad no puede estar en blanco. Por favor, proporciona una cantidad valido.',

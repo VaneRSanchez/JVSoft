@@ -390,6 +390,15 @@ class SalesAPIView(APIView):
                 'total_pages': paginator.num_pages,
                 'current_page': sales_page.number
             })
+        elif query == 'statistics':
+
+            count_total = jv_models.SalesModel.objects.filter(
+            ).count()
+            
+            return JsonResponse({
+                'success': True,
+                'count_total': count_total,
+            })
         elif query == 'obj':
             id = request.query_params.get('id', None)
             instance = self.get_object(id)
@@ -684,7 +693,8 @@ class InventoryRawMaterialsAPIView(APIView):
 
             count_raw_materials_expired = jv_models.InventoryRawMaterialsModel.objects.filter(
                 date_exp__lte = current_date,
-                status = 1
+                status = 1,
+                movement_types = 1,
             ).count()
 
 
@@ -934,6 +944,12 @@ class SalesFinalizeAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+    def get_products_materials(self, products_id):
+        try:
+            return jv_models.ProductsMaterialsModel.objects.filter(products_id = products_id)
+        except jv_models.ProductsMaterialsModel.DoesNotExist:
+            raise Http404('El producto de la materia no existe.')
+        
     def get_product(self, pk):
         try:
             return jv_models.ProductsModel.objects.get(pk=pk)
@@ -963,6 +979,7 @@ class SalesFinalizeAPIView(APIView):
                 try:
                     instance_product = self.get_product(item['id'])
                 except Http404 as e:
+                    transaction.set_rollback(True)
                     return JsonResponse({'success': False, 'msg': str(e)}, status = 404)
                 
                 item_obj =  {
@@ -973,12 +990,33 @@ class SalesFinalizeAPIView(APIView):
                 }
                 
                 sale_total += item['quantity'] * instance_product.price
-
+                
                 serializer_details = jv_serializers.DetailSalesAddSerializer(data = item_obj)
                 if not serializer_details.is_valid():
+                    transaction.set_rollback(True)
                     return JsonResponse({'success': False, 'msg': serializer_details.errors}, status = 400)
                 
                 serializer_details.save()
+                
+                try:
+                    instance_product_materials = self.get_products_materials(item['id'])
+                except Http404 as e:
+                    transaction.set_rollback(True)
+                    return JsonResponse({'success': False, 'msg': str(e)}, status = 404)
+
+                for materias in instance_product_materials:
+                    material_obj =  {
+                        'quantity': materias.quantity,
+                        'date_exp': '2024-01-01T00',
+                        'raw_materials_id': materias.raw_materials_id,
+                        'movement_types_id': 2
+                    }
+                    serializer_inventoryrawmaterials = jv_serializers.InventoryRawMaterialsAddSerializer(data = material_obj)
+                    if not serializer_inventoryrawmaterials.is_valid():
+                        transaction.set_rollback(True)
+                        return JsonResponse({'success': False, 'msg': serializer_inventoryrawmaterials.errors}, status = 400)
+
+                    serializer_inventoryrawmaterials.save()
 
             sales_instance.total = sale_total
             sales_instance.save()
