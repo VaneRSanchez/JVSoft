@@ -1,0 +1,34 @@
+@use '../base/vars' as v;
+
+@mixin grid($columns){
+    display: grid;
+    grid-template-columns: repeat($columns, 1fr);
+
+    @include MediaPhone {
+        grid-template-columns: 1fr;
+    }  
+}
+
+@mixin grid-t-2($column1, $column2){
+    display: grid;
+    grid-template-columns: $column1 $column2;
+    align-items: start;
+}
+
+@mixin MediaPhone {
+    @media (max-width: v.$media-phone) {
+        @content;
+    }
+}
+
+@mixin MediaTablet {
+    @media (max-width: v.$media-tablet) {
+        @content;
+    }
+}
+
+@mixin MediaDesktop {
+    @media (max-width: v.$media-desktop) {
+        @content;
+    }
+}

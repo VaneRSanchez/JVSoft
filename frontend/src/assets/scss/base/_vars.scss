@@ -1,17 +1,47 @@
-$html-fontsize: 11pt;
+$html-fontsize: 10px;
+
+$media-phone: 900px;
+$media-tablet: 1300px;
+$media-desktop: 1600px;
 
 $bg-primary: #fff;
 $bg-bar: #aaaaaa;
+$bg-content: #f3f3f3;
 
 $color-white: #fff;
+$color-white-hover: #f5f5f5;
 $color-body: #000;
-$color-primary: #26798E;
-$color-primary-hover: #2f8da5;
+$color-primary: #0073ef;
+$color-primary-hover: #2185f0;
+$color-primary-disabled: #4297f1;
+$color-blue: #A8D1D1;
 $color-secondary: #ffb902;
+$color-danger: #FF6961;
+$color-danger-hover: #ff7770;
+$color-danger-disabled: #ff827b;
+$color-warning: #ff9161;
+$color-warning-hover: #ffa57e;
+$color-warning-disabled: #ffb494;
+$color-success: #77DD77;
+$color-dark: #171717;
+
+$border-color: #e9edf3;
 
 $input-color-active: #a3a3a3;
-$input-height: 48px;
-$input-height-focus: 58px;
-$input-font-size: 1rem;
+$input-height: 34px;
+$input-height-focus: 52px;
+$input-font-size: 1.2rem;
+
+$btn-radius: 8px;
 
 $checkbox-size: 20px;
+
+$navbar-height: 56px;
+$navbar-bg: #fff;
+
+$menu-width: 260px;
+$menu-bg: #fff;
+
+$boxshadow: 0 0 12px -6px rgba(0, 0, 0, 0.4); 
+
+$info-bar-height: 58px;

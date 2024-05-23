@@ -4,19 +4,23 @@ export const applyInputEffects = () => {
   inputGroups.forEach(inputGroup => {
     const input = inputGroup.querySelector('input');
 
+    if (input.value.trim()) {
+      inputGroup.classList.add('active');
+    }
+
     input.addEventListener('focus', () => {
       inputGroup.classList.add('active');
     });
 
     input.addEventListener('blur', () => {
       if (!input.value.trim()) {
-          inputGroup.classList.remove('active');
+        inputGroup.classList.remove('active');
       }
     });
 
     input.addEventListener('input', () => {
       if (input.value.trim()) {
-          inputGroup.classList.add('active');
+        inputGroup.classList.add('active');
       }
     });
 

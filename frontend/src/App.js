@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthController from './controllers/AuthController';
+import AppController from './controllers/AppController';
 
 function App() {
-  const [ authToken ] = useState(null);
+  const [ content, setContent] = useState();
+  const [ auth, setAuth] = useState(false);
 
-  return (
-    (
-      authToken ? 
-        <div>
-          Hola
-        </div>
-      :
-        <AuthController />
-    )
-  );
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    
+    if (authToken) {
+      setAuth(true);
+      setContent(<AppController setAuth={setAuth} />);
+      return;
+    }
+
+    setAuth(false);
+    setContent(<AuthController setAuth={setAuth} />);    
+  }, [auth]);
+
+  return content;
 }
 
 export default App;
