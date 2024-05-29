@@ -20,8 +20,14 @@ Food sales and inventory system with expiration alert.
       <img src="https://raw.githubusercontent.com/VaneRSanchez/JVSoft/master/images/ss2.png" alt="Screenshot 2" width="100%">
       <p>Login</p>
     </td>
-    <td>      
+  </tr>
+  <tr>
+    <td>
       <img src="https://raw.githubusercontent.com/VaneRSanchez/JVSoft/master/images/ss3.png" alt="Screenshot 3" width="100%">
+      <p>Login</p>
+    </td>
+    <td>      
+      <img src="https://raw.githubusercontent.com/VaneRSanchez/JVSoft/master/images/ss4.png" alt="Screenshot 4" width="100%">
       <p>Login</p>
     </td>
   </tr>
