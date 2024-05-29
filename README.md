@@ -4,7 +4,7 @@ Food sales and inventory system with expiration alert.
 ## Information
 - Django (API Rest)
 - React
-- JW Token
+- JWT Token
 - Socket IO
 - MySQL
 - Docker
